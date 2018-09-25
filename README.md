@@ -3,7 +3,7 @@
 * Project Manager: Brian Phan
 * Git Master: --
 * Deployed Project: 
-* GitHub repository: 
+* GitHub repository: https://github.com/bqtphan/DisasterMap
 
 # PROJECT PROPOSAL : DisasterMap
 ### Introduction
