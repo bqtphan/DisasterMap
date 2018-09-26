@@ -2,9 +2,7 @@ import React from "react";
 
 const Home = () => (
   <div>
-    <p>
-     Disaster Map
-    </p>
+    <h1>Map</h1>
   </div>
 );
 
