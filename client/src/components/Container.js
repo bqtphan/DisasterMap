@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import UserAccount from "./pages/UserAccount";
 
-class Portfolio extends Component {
+class Container extends Component {
   state = {
     currentPage: "Home"
   };
@@ -36,4 +36,4 @@ class Portfolio extends Component {
   }
 }
 
-export default Portfolio;
+export default Container;
