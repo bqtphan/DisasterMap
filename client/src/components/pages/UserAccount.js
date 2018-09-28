@@ -50,7 +50,7 @@ class UserAccount extends Component {
             value={this.state.Password}
             name="Password"
             onChange={this.handleInputChange}
-            type="text"
+            type="password"
             placeholder="Password"
           />         
           <input
