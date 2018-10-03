@@ -1,0 +1,22 @@
+{
+    "development": {
+      "username": "root",
+      "password": "root",
+      "database": "disaster_db",
+      "port": 3306,
+      "host": "localhost",
+      "dialect": "mysql"
+    },
+    "test": {
+      "username": "root",
+      "password": null,
+      "database": "disaster_db",
+      "host": "localhost",
+      "dialect": "mysql",
+      "logging": false
+    },
+    "production": {
+      "use_env_variable": "JAWSDB_URL",
+      "dialect": "mysql"
+    }
+  }

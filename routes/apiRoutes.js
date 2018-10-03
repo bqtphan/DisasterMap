@@ -1,11 +1,46 @@
-// var db = require("../models");
+const router = require('express').Router();
+const usersController = require('../controllers/usersController') 
 
-// module.exports = function (app) {
-//   app.get("/api/wishlists", function (req, res) {
-//     db.wishlists.findAll({}).then(function (result) {
-//       res.json(result);
+router.route("/users")
+    .get(usersController.findAll)
+    .post(usersController.create);
+
+
+router.route("/users/:id")
+    .get(usersController.findById)
+    .put(usersController.update)
+    .delete(usersController.remove);
+
+module.exports = router;
+
+// module.exports = (app) => {
+//     // GET: /api/users
+//     // Get all users
+//     app.get('/api/users', (req, res) => {
+//         db.User.findAll({})
+//             .then(dbUser => res.json(dbUser))
 //     });
-//   });
+    
+//     // GET: /api/mapmessages
+//     // Get all map messages
+//     app.get('/api/mapmessages', (req, res) => {
+//         db.MapMessage.findAll({})
+//             .then(dbMapMessage => res.json(dbMapMessage));
+//     });
+
+//     // GET: /api/mapmessages/:id
+//     // Get all map message for specific id
+//     app.get('/api/mapmessages/:id', (req, res) => {
+//         db.MapMessage.findAll({
+//             where: {
+//                 id: req.params.id
+//             }
+//         }).then(dbMapMessage => res.json(dbMapMessage));
+//     });
+
+    
+// }
+
 //   //get route to search for wishlist with specific name
 //   app.get("/api/wishlists/:name", function (req, res) {
 //     db.wishlists.findAll({
