@@ -3,7 +3,7 @@
       "username": "root",
       "password": "root",
       "database": "disaster_db",
-      "port": 3306,
+      "port": 8889,
       "host": "localhost",
       "dialect": "mysql"
     },
