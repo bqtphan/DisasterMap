@@ -2,7 +2,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const db = require('./models');
+const mongoose = require("mongoose");
 const cors = require('cors');
 const routes = require('./routes');
 
@@ -18,13 +18,15 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
-// Routes
+// Add routes, both API and view
 app.use(routes);
 
-// Starting the server, syncing our models
-db.sequelize.sync({}).then(() => {
+// Connect to the Mongo DB
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/disastermap");
+
+// Start the API server
   app.listen(PORT, function() {
     console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);
   });
-})
+
 
