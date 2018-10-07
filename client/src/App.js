@@ -6,11 +6,15 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
+
+// Pages
 import Home from './pages/Home';
 import NoMatch from './pages/NoMatch';
 import Dashboard from './pages/Dashboard';
 import EmergencyKits from './pages/EmergencyKits';
 import Map from './pages/Map';
+import Evacuationlists from "./pages/evacuationlists";
+import Homelists from "./pages/homelists";
 
 const styles = theme => ({
     root: {
@@ -64,8 +68,11 @@ class App extends Component {
     handleLoginSubmit = event => {
     // Preventing the default behavior of the Login submit (which is to refresh the page)
     event.preventDefault();
-    alert(`Hello ${this.state.email}. Password is ${this.state.password}`);
-    // Alert the user their first and last name, clear `this.state.firstName` and `this.state.lastName`, clearing the inputs
+    
+    // ==================================
+    // FIREBASE AUTHENTICATION GOES HERE 
+
+    // TESTING WITH DUMMY DATA: EMAIL-David PW-code
     if(this.state.email === "David" && this.state.password === "code") {
         this.setState({
             userLogin: true,
@@ -73,8 +80,9 @@ class App extends Component {
             password: "",
             modal: false
         })
-        
     }
+    // ==================================
+    
     };
 
     render() {
@@ -106,9 +114,11 @@ class App extends Component {
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
                     <Switch>
-                        {this.state.userLogin ? <Route exact path="/" component={Dashboard} /> : <Route exact path="/" component={Home} />}
-                        <Route exact path="/emergencykits" component={EmergencyKits} />
+                        <Route exact path="/" component={Home} />
+                        <Route exact path="/dashboard" component={Dashboard} /> 
                         <Route exact path="/map" component={Map} />
+                        <Route exact path="/evacuationlists" component={Evacuationlists} />
+                        <Route exact path="/homelists" component={Homelists} />
                         <Route component={NoMatch} />
                     </Switch>
                 </main>

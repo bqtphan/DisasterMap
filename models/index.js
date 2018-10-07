@@ -1,4 +1,6 @@
 module.exports = {
 	User: require("./user"),
-	MapMessage: require("./mapMessage")
+	MapMessage: require("./mapMessage"),
+	Homekit: require("./homekit"),
+	Evackit: require("./evackit")
   };  

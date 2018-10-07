@@ -53,11 +53,17 @@ const SideNavBar = ({ classes, theme, onDrawerToggle, mobileOpen, userLogin }) =
                     <ListItemText primary="Announcement" />
                 </ListItem>
 
-                <ListItem button component={Link} to="/emergencykits">
+                <ListItem button component={Link} to="/evacuationlists">
                     <ListItemIcon>
                         <Style />
                     </ListItemIcon>
-                    <ListItemText primary="Emergency Kits" />
+                    <ListItemText primary="Evacuation List" />
+                </ListItem>
+                <ListItem button component={Link} to="/homelists">
+                    <ListItemIcon>
+                        <Style />
+                    </ListItemIcon>
+                    <ListItemText primary="Home List" />
                 </ListItem>
 
                 <ListItem button component={Link} to="/evacuationplan">
