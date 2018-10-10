@@ -1,14 +1,8 @@
 import React, { Component } from "react";
-// import Jumbotron from "../../components/Jumbotron";
-// import DeleteBtn from "../../components/DeleteBtn";
 import API from "../../utils/API";
-// import { Col, Container } from "../../components/Grid";
-// import { List, ListItem } from "../../components/List";
-// import { Input,  FormBtn } from "../../components/Form";
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Grid, Typography, TextField, Button, List, ListItem, ListItemText } from '@material-ui/core';
+import { Paper, Grid, Typography, TextField, Button, List, ListItem, ListItemText, Checkbox, FormLabel, FormGroup, FormControlLabel, FormControl } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 import { Delete } from '@material-ui/icons';
 
@@ -33,14 +27,17 @@ const styles = theme => ({
   rightIcon: {
     marginLeft: theme.spacing.unit,
   },
+  formControl: {
+    margin: theme.spacing.unit * 3,
+  },
 });
 
 let recommendedItems = [
-  "Copies of your important papers in a waterproof bag", 
-  "Extra set of car and house keys", "Extra mobile phone charger", 
-  "Bottled water and snacks such as energy or granola bars", 
-  "First-aid supplies, flashlight, and whistle", 
-  "Battery-powered or hand-crank radio (with extra batteries, if needed)", 
+  "Copies of your important papers in a waterproof bag",
+  "Extra set of car and house keys", "Extra mobile phone charger",
+  "Bottled water and snacks such as energy or granola bars",
+  "First-aid supplies, flashlight, and whistle",
+  "Battery-powered or hand-crank radio (with extra batteries, if needed)",
   "A list of the medications each member of your family needs and at least a 14-day supply of each medication",
   "Toothpaste, toothbrushes, wet cleansing wipes, and so on",
   "Contact and meeting place information for your family and a map of your local area",
@@ -51,54 +48,50 @@ let recommendedItems = [
 ]
 
 class Evacuationlists extends Component {
-    state = {
-        items: []
-    };
+  state = {
+    items: [],
+    item: ""
+  };
 
-   
+  componentDidMount() {
+    this.loadEvacuationlists();
+  }
 
-    componentDidMount() {
-        this.loadEvacuationlists();
-    }
+  loadEvacuationlists = () => {
+    API.getAllEvacuationLists()
+      .then(res => this.setState({ items: res.data }))
+      .catch(err => console.log(err));
+  };
 
-
-loadEvacuationlists = () => {
-  console.log("Hello")
-  API.getAllEvacuationLists()
-    .then(res =>{
-        this.setState({ evacuationlists: res.data, items: ""})
-    }
-        )
-    .catch(err => console.log(err));
-};
-
-deleteEvacuationlists = id => {
+  deleteEvacuationlists = id => {
     API.deleteEvacuatlists(id)
-    .then(res => this.getAllEvacuationlists())
-    .catch(err => console.log(err));
-};
-handleInputChange = event => {
+      .then(res => this.loadEvacuationlists())
+      .catch(err => console.log(err));
+  };
+
+  handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({
       [name]: value
     });
   };
+
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.item) {
       API.saveEvacuationlists({
-        items: this.state.items,
-        
+        item: this.state.items,
       })
         .then(res => this.loadEvacuationlists())
         .catch(err => console.log(err));
     }
   };
+
   render() {
     const { classes } = this.props;
 
     return (
-<Grid container spacing={8}>
+      <Grid container spacing={8}>
         <Grid item xs={12} md={12}>
           <Grid
             container
@@ -107,9 +100,28 @@ handleInputChange = event => {
           >
             <Grid item xs={12} md={10}>
               <Paper className={classes.paper}>
-                <Typography variant="title" align="center">
-                Evacuation Kit
+                <Typography variant="h6" align="center">
+                  Evacuation Kit
           </Typography>
+
+          <FormControl component="fieldset" className={classes.formControl}>
+          <FormLabel component="legend">An evacuation kit is one that you would take with you in case of an evacuation. Evacuation kit should
+be easily portable like a backpack or suitcase on wheels. Store it somewhere you can easily
+get to it.
+Recommended items to consider including in your Evacuation kit:</FormLabel>
+          <FormGroup>
+          {this.state.items.map((item, index) => (
+            <FormControlLabel
+            control={
+              <Checkbox key={index} checked={false} onChange={(event) => this.handleCheckChange(event, index)} value={item} />
+            }
+            label={item.item}
+          />
+          ))
+          }
+          </FormGroup>
+          </FormControl>
+          
                 <form className={classes.container}>
                   <TextField
                     id="item"
@@ -125,13 +137,16 @@ handleInputChange = event => {
                     SUBMIT
       </Button>
                 </form>
-                {this.state.items.length ? (
+                {/* {this.state.items.length ? (
                   <List>
-                    {this.state.items.map(items => {
+                    {this.state.items.map(item => {
                       return (
-                        <ListItem key={items._id}>
-                          <Link to={`/evacuationlists/${items._id}`} />
-                          <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.deleteEvacuationlists(items._id)}>
+                        <ListItem key={item._id}>
+                          <Typography>
+                            {item.item}
+                          </Typography>
+                          <Link to={`/evacuationlists/${item._id}`} />
+                          <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.deleteEvacuationlists(item._id)}>
                             Delete
                         <Delete className={classes.rightIcon} />
                           </Button>
@@ -140,55 +155,18 @@ handleInputChange = event => {
                     })}
                   </List>
                 ) : (
-                    <Typography variant="subheading">
+                    <Typography variant="subtitle1">
                       No Results to Display
             </Typography>
-                  )}
+                  )} */}
               </Paper>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-
-      // <Container fluid>
-      //     {/* <Col size="md-6"> */}
-      //       {/* <Jumbotron>
-      //         <h1>Disaster Kit</h1>
-      //       </Jumbotron>
-      //     {/* </Col> */}
-      //     <Col size="md-6">
-      //       <Jumbotron>
-      //         <h1>Evacuation Kit</h1>
-      //       </Jumbotron>
-      //       <form>
-      //         <Input name="item" placeholder="Evacuation Items (required)" />
-              
-      //         <FormBtn>Submit Item</FormBtn>
-      //       </form>
-      //       {this.state.items.length ? (
-      //         <List>
-      //           {this.state.items.map(items => {
-      //             return (
-      //               <ListItem key={items._id}>
-      //                 <a href={"/evacuationlists/" + items._id}>
-                        
-      //                 </a>
-      //                 <DeleteBtn onClick={() => this.deleteEvacuationlists(items._id)} />
-      //               </ListItem>
-      //             );
-      //           })}
-      //         </List>
-      //       ) : (
-      //         <h3>No Results to Display</h3>
-      //       )}
-      //     </Col>
-      // </Container>
     );
   }
 }
-
-// export default Evacuationlists;
-
 
 Evacuationlists.propTypes = {
   classes: PropTypes.object.isRequired,

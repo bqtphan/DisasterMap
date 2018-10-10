@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const routes = require("./routes/api");
+const routes = require("./routes");
 const PORT = process.env.PORT || 3002;
 const app = express();
 const cors = require('cors');
@@ -21,8 +21,18 @@ if (process.env.NODE_ENV === "production") {
 // Add routes, both API and view
 app.use(routes);
 
+
+
 // Connect to the Mongo DB
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/emergency_kit");
+
+mongoose.connection.on('connected', function() {
+  console.log("connection established successfully");
+});
+
+mongoose.connection.on('error', function(err) {
+  console.log('connection to mongo failed ' + err);
+});
 
 // Send every other request to the React app
 // Define any API routes before this runs

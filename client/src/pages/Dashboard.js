@@ -1,6 +1,5 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid, Typography } from '@material-ui/core';
 
@@ -20,7 +19,7 @@ class Dashboard extends Component {
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <Paper className={classes.paper}>
-              <Typography variant="headline">
+              <Typography variant="h6">
                 Dashboard
               </Typography>
               Still under construction! Please be patient with us!

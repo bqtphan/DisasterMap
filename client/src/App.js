@@ -1,20 +1,22 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import Header from "./components/Header";
 import SideNavBar from "./components/SideNavBar";
 import { CssBaseline } from '@material-ui/core';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 
 // Pages
 import Home from './pages/Home';
 import NoMatch from './pages/NoMatch';
 import Dashboard from './pages/Dashboard';
-import EmergencyKits from './pages/EmergencyKits';
 import Map from './pages/Map';
 import Evacuationlists from "./pages/evacuationlists";
 import Homelists from "./pages/homelists";
+import Resources from './pages/Resources';
+import Shelters from './pages/Shelters';
+import Announcement from './pages/Announcement';
+import SignUp from './pages/SignUp';
 
 const styles = theme => ({
     root: {
@@ -121,6 +123,10 @@ class App extends Component {
                         <Route exact path="/map" component={Map} />
                         <Route exact path="/evacuationlists" component={Evacuationlists} />
                         <Route exact path="/homelists" component={Homelists} />
+                        <Route exact path="/shelters" component={Shelters} />
+                        <Route exact path="/resources" component={Resources} />
+                        <Route exact path="/announcement" component={Announcement} />
+                        <Route exact path="/signup" component={SignUp} />
                         <Route component={NoMatch} />
                     </Switch>
                 </main>

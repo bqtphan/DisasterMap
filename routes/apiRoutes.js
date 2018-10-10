@@ -1,31 +1,59 @@
-const app = require("express")();
-const evacuationController = require("../../controllers/evacuationController");
-const homeController = require("../../controllers/homeController");
+const router = require("express").Router();
+// const evacuationController = require("../controllers/evacuationController");
+// const homeController = require("../controllers/homeController");
+const {evacuationController, homeController, mapMessagesController, usersController } = require('../controllers');
 
 
 // Matches with "/evacuations"
-app.route("/evacuationlists")
+router
+  .route("/evacuationlists")
   .get(evacuationController.findAll)
   .post(evacuationController.create);
 
 // Matches with "/evacuations/:id"
-app
+router
   .route("/evacuationlists/:id")
   .get(evacuationController.findById)
   .put(evacuationController.update)
   .delete(evacuationController.remove);
 
-  // Matches with "/home"
-app.route("/homelists/")
-.get(homeController.findAll)
-.post(homeController.create);
+// Matches with "/home"
+router
+  .route("/homelists")
+  .get(homeController.findAll)
+  .post(homeController.create);
 
 // Matches with "/home/:id"
-app
-.route("/homelists/:id")
-.get(homeController.findById)
-.put(homeController.update)
-.delete(homeController.remove);
+router
+  .route("/homelists/:id")
+  .get(homeController.findById)
+  .put(homeController.update)
+  .delete(homeController.remove);
+
+  
+router
+  .route("/mapmessages")
+  .get(mapMessagesController.findAll)
+  .post(mapMessagesController.create);
 
 
-module.exports = app;
+router
+  .route("/mapmessages/:id")
+  .get(mapMessagesController.findById)
+  .put(mapMessagesController.update)
+  .delete(mapMessagesController.remove);
+
+router
+  .route("/users")
+  .get(usersController.findAll)
+  .post(usersController.create);
+
+router
+  .route("/users/:id")
+  .get(usersController.findById)
+  .put(usersController.update)
+  .delete(usersController.remove);
+
+
+
+module.exports = router;
