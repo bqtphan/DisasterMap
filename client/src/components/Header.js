@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, Typography, IconButton, Button, TextField, InputAdornment, FormControlLabel, Checkbox } from '@material-ui/core';
-import { Menu, PermIdentity, Lock } from '@material-ui/icons';
+import { AppBar, Toolbar, Typography, IconButton, Button, TextField, InputAdornment, FormControlLabel, Checkbox, Avatar } from '@material-ui/core';
+import { Menu, PermIdentity, Lock, AccountCircle } from '@material-ui/icons';
 import LoginModal from './SimpleModal';
+import { Redirect } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -20,19 +21,6 @@ const styles = theme => ({
             display: 'none',
         },
     },
-    modal: {
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        position: 'absolute',
-        width: theme.spacing.unit * 50,
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing.unit * 4,
-    },
-    root: {
-        flexGrow: 1,
-    },
     grow: {
         flexGrow: 1,
     },
@@ -47,10 +35,13 @@ const styles = theme => ({
     },
     button: {
         margin: theme.spacing.unit,
-    }
+    },
+    avatar: {
+        margin: 10,
+    },
 });
 
-const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, modal, email, password, onInputChange, onLoginSubmit }) => {
+const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, modal, email, password, onInputChange, onLoginSubmit, userLogin }) => {
 
     return (
         <Fragment>
@@ -64,17 +55,34 @@ const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, mod
                     >
                         <Menu />
                     </IconButton>
-                    <Typography variant="title" color="inherit" noWrap className={classes.grow} >
+                    <Typography variant="h6" color="inherit" noWrap className={classes.grow} >
                         Disaster Map
                     </Typography>
-                    <Button onClick={onOpenModal} color="inherit">Login</Button>
+
+                    {userLogin ? (
+                                    
+                                        <div>
+                                          <IconButton
+                                            color="inherit"
+                                          >
+                                            <AccountCircle />
+                                          </IconButton>
+                                          </div>
+                    ) : (
+                        <Fragment>
+                        <Button href="/signup" color="inherit">Sign Up</Button>
+                        <Button onClick={onOpenModal} color="inherit">Login</Button>
+                        </Fragment>
+                    )}
+                    
+
                     <LoginModal
                         ariaLabel="Login"
                         ariaDescription="Sign in using your email and password."
                         open={modal}
                         onClose={onCloseModal}
                     >
-                        <Typography variant="title">
+                        <Typography variant="h6">
                             Welcome
                     </Typography>
                         <form className={classes.container} onSubmit={onLoginSubmit}>
@@ -115,8 +123,9 @@ const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, mod
                                 control={<Checkbox value="remember" color="primary" />}
                                 label="Remember me"
                             />
+
                             <Button type="submit" variant="contained" color="primary" className={classes.button}>
-                                Submit
+                                Log in
       </Button>
                         </form>
                     </LoginModal>

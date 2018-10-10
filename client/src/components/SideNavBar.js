@@ -1,8 +1,8 @@
-import React, { Fragment, Component } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Drawer, List, Hidden, Divider, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { Dashboard, Assignment, Map, Home, Announcement, DepartureBoard, Style, Help, LocationCity } from '@material-ui/icons';
+import { Dashboard, BusinessCenter, Map, Home, Announcement, Work, Help, LocationCity } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
@@ -24,7 +24,6 @@ const styles = theme => ({
     }
 });
 
-const MyLink = props => <Link to="/emergencykits" {...props} />
 const SideNavBar = ({ classes, theme, onDrawerToggle, mobileOpen, userLogin }) => {
 
     const drawer = (
@@ -53,30 +52,26 @@ const SideNavBar = ({ classes, theme, onDrawerToggle, mobileOpen, userLogin }) =
                     <ListItemText primary="Announcement" />
                 </ListItem>
 
+                <Divider />
+
                 <ListItem button component={Link} to="/evacuationlists">
                     <ListItemIcon>
-                        <Style />
+                        <Work />
                     </ListItemIcon>
-                    <ListItemText primary="Evacuation List" />
+                    <ListItemText primary="Evacuation Kit" />
                 </ListItem>
                 <ListItem button component={Link} to="/homelists">
                     <ListItemIcon>
-                        <Style />
+                        <BusinessCenter />
                     </ListItemIcon>
-                    <ListItemText primary="Home List" />
+                    <ListItemText primary="Home Kit" />
                 </ListItem>
 
-                <ListItem button component={Link} to="/evacuationplan">
-                    <ListItemIcon>
-                        <DepartureBoard />
-                    </ListItemIcon>
-                    <ListItemText primary="Evacuation Plan" />
-                </ListItem>
-                <ListItem button component={Link} to="/shelter">
+                <ListItem button component={Link} to="/shelters">
                     <ListItemIcon>
                         <LocationCity />
                     </ListItemIcon>
-                    <ListItemText primary="Shelter" />
+                    <ListItemText primary="Shelters" />
                 </ListItem>
                 <ListItem button component={Link} to="/map">
                     <ListItemIcon>

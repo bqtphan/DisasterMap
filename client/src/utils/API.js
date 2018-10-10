@@ -33,6 +33,29 @@ export default {
   saveevacuationlists: function(evacuationlists) {
     return axios.post("/api/evacuationlists", evacuationlists);
   },
-
+  getMapMessages: () => {
+    return axios.get("/api/mapmessages");
+  },
+  getMapMessage: (id) => {
+    return axios.get("/api/mapmessages/" + id);
+  },
+  saveMapMessage: (mapMessageData) => {
+    return axios.post("/api/mapmessages", mapMessageData);
+  },
+  deleteMapMessage: (id) => {
+    return axios.delete("/api/mapmessages/" + id);
+  },
+  getUsers: () => {
+    return axios.get("/api/users");
+  },
+  getUser: (id) => {
+    return axios.get("/api/users/" + id);
+  },
+  saveUser: (userData) => {
+    return axios.post("/api/users", userData);
+  },
+  deleteUser: (id) => {
+    return axios.delete("/api/users/" + id);
+  },
 };
 

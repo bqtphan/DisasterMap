@@ -1,6 +1,5 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid, Typography } from '@material-ui/core';
 
@@ -12,20 +11,19 @@ const styles = theme => ({
     }
   });
 
-class EmergencyKits extends Component {
-    
+class Resources extends Component {
     
     render() {
         const { classes } = this.props
-
     return (
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <Paper className={classes.paper}>
-              <Typography variant="headline">
-                EmergencyKits
+              <Typography variant="h6">
+                Resources
               </Typography>
-              Still under construction! Please be patient with us!
+              <a href="http://google.org/crisismap/weather_and_events">Google Crisis Map</a>
+              <p>"...help people find and use critical emergency information when they need it most. Using Google's technology, speed, and user-friendly design, Crisis Map was designed to make disaster information easy to find, use, and share."</p>
               </Paper>
           </Grid>
         </Grid>
@@ -33,8 +31,8 @@ class EmergencyKits extends Component {
     }
 }
 
-EmergencyKits.propTypes = {
+Resources.propTypes = {
     classes: PropTypes.object.isRequired,
   };
   
-export default withStyles(styles, { withTheme: true })(EmergencyKits)
+export default withStyles(styles, { withTheme: true })(Resources)
