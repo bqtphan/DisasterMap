@@ -78,10 +78,9 @@ class Evacuationlists extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
+    console.log(this.state.item)
     if (this.state.item) {
-      API.saveEvacuationlists({
-        item: this.state.items,
-      })
+      API.saveevacuationlists({item: this.state.item})
         .then(res => this.loadEvacuationlists())
         .catch(err => console.log(err));
     }
@@ -132,8 +131,9 @@ Recommended items to consider including in your Evacuation kit:</FormLabel>
                     margin="normal"
                     required
                     autoFocus
+                    onChange={this.handleInputChange}
                   />
-                  <Button type="submit" variant="contained" color="primary" className={classes.button}>
+                  <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={this.handleFormSubmit}>
                     SUBMIT
       </Button>
                 </form>
