@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import API from "../../utils/API";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Grid, Typography, TextField, Button, List, ListItem, ListItemText, Checkbox, FormLabel, FormGroup, FormControlLabel, FormControl } from '@material-ui/core';
-import { Link } from 'react-router-dom'
-import { Delete } from '@material-ui/icons';
+import { Paper, Grid, Typography, TextField, Button, List, ListItem, ListItemText, Checkbox, FormLabel, FormGroup, IconButton, ListItemSecondaryAction, FormControlLabel, FormControl } from '@material-ui/core';
+import { Delete, Edit } from '@material-ui/icons';
+import SimpleModal from '../../components/SimpleModal';
 
 const styles = theme => ({
   paper: {
@@ -30,27 +30,35 @@ const styles = theme => ({
   formControl: {
     margin: theme.spacing.unit * 3,
   },
+  slashedText: {
+    textDecoration: "line-through"
+  }
 });
 
 let recommendedItems = [
-  "Copies of your important papers in a waterproof bag",
-  "Extra set of car and house keys", "Extra mobile phone charger",
-  "Bottled water and snacks such as energy or granola bars",
-  "First-aid supplies, flashlight, and whistle",
-  "Battery-powered or hand-crank radio (with extra batteries, if needed)",
-  "A list of the medications each member of your family needs and at least a 14-day supply of each medication",
-  "Toothpaste, toothbrushes, wet cleansing wipes, and so on",
-  "Contact and meeting place information for your family and a map of your local area",
-  "A stuffed animal or toy for your child and something to help occupy their time, like books or coloring books. If this includes a hand-held video game, make sure you have extra batteries",
-  "Rain ponchos",
-  "External mobile phone battery pack or solar charger. Some hand-crank flashlights will also include a phone charger",
-  "Escape Tool for your car"
+  {item:"Copies of your important papers in a waterproof bag",checked: false},
+  {item:"Extra set of car and house keys", checked: false}, 
+  {item:"Extra mobile phone charger", checked: false},
+  {item:"Bottled water and snacks such as energy or granola bars",checked: false},
+  {item:"First-aid supplies, flashlight, and whistle",checked: false},
+  {item:"Battery-powered or hand-crank radio (with extra batteries, if needed)",checked: false},
+  {item:"A list of the medications each member of your family needs and at least a 14-day supply of each medication",checked: false},
+  {item:"Toothpaste, toothbrushes, wet cleansing wipes, and so on",checked: false},
+  {item:"Contact and meeting place information for your family and a map of your local area",checked: false},
+  {item:"A stuffed animal or toy for your child and something to help occupy their time, like books or coloring books. If this includes a hand-held video game, make sure you have extra batteries",checked: false},
+  {item:"Rain ponchos",checked: false},
+  {item:"External mobile phone battery pack or solar charger. Some hand-crank flashlights will also include a phone charger",checked: false},
+  {item:"Escape Tool for your car", checked: false}
 ]
 
 class Evacuationlists extends Component {
   state = {
     items: [],
-    item: ""
+    item: "",
+    editItem: "",
+    editItemId: "",
+    modal: false,
+    kit: false
   };
 
   componentDidMount() {
@@ -59,15 +67,23 @@ class Evacuationlists extends Component {
 
   loadEvacuationlists = () => {
     API.getAllEvacuationLists()
-      .then(res => this.setState({ items: res.data }))
+      .then(res => this.setState({ items: res.data, item: ""}))
       .catch(err => console.log(err));
   };
 
   deleteEvacuationlists = id => {
-    API.deleteEvacuatlists(id)
+    API.deletelists(id)
       .then(res => this.loadEvacuationlists())
       .catch(err => console.log(err));
   };
+
+  updateItem = () => {
+    if (this.state.editItem) {
+      API.updateevacuationlists(this.state.editItemId, { item: this.state.editItem })
+        .then(res => this.loadEvacuationlists())
+        .catch(err => console.log(err));
+    }
+  }
 
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -78,19 +94,35 @@ class Evacuationlists extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    console.log(this.state.item)
     if (this.state.item) {
-      API.saveevacuationlists({item: this.state.item})
+      API.saveevacuationlists({ item: this.state.item })
         .then(res => this.loadEvacuationlists())
         .catch(err => console.log(err));
     }
+  };
+
+  handleCheckChange = (event, id) => {
+    let item = this.state.items.filter(x => x._id === id)
+    item[0].checked = event.target.checked
+    API.updateevacuationlists(id, item[0])
+      .then(res => this.loadEvacuationlists())
+      .catch(err => console.log(err));
+  }
+
+  handleOpenModal = (id) => {
+    let editItem = this.state.items.filter(x => x._id === id)[0].item
+    this.setState({ modal: true, editItem, editItemId: id });
+  };
+
+  handleCloseModal = () => {
+    this.setState({ modal: false, editItem: "", editItemId: "" });
   };
 
   render() {
     const { classes } = this.props;
 
     return (
-      <Grid container spacing={8}>
+      <Grid container spacing={0}>
         <Grid item xs={12} md={12}>
           <Grid
             container
@@ -102,26 +134,47 @@ class Evacuationlists extends Component {
                 <Typography variant="h6" align="center">
                   Evacuation Kit
           </Typography>
+                <Typography variant="body1">
+                  An evacuation kit is one that you would take with you in case of an evacuation. Evacuation kit should
+        be easily portable like a backpack or suitcase on wheels. Store it somewhere you can easily
+        get to it.
+          </Typography>
+                <List>
+                  {
+                    this.state.items.length ? 
+                    this.state.items.map((item, index) => (
+                      <ListItem
+                        key={index}
+                        dense
+                        className={classes.listItem}
+                      >
+                        <Checkbox
+                          checked={item.checked}
+                          tabIndex={-1}
+                          disableRipple
+                          onChange={(event) => this.handleCheckChange(event, item._id)}
+                        />
+                        <ListItemText primary={item.item} className={item.checked && classes.slashedText}/>
+                        {
+                          !item.checked ? (<ListItemSecondaryAction >
+                          <IconButton aria-label="Edit" >
+                            <Edit onClick={() => this.handleOpenModal(item._id)} />
+                          </IconButton>
+                          <IconButton aria-label="Delete" >
+                            <Delete onClick={() => this.deleteEvacuationlists(item._id)} />
+                          </IconButton>
+                        </ListItemSecondaryAction>) 
+                        : null
+                        }
+                        
+                      </ListItem>
 
-          <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">An evacuation kit is one that you would take with you in case of an evacuation. Evacuation kit should
-be easily portable like a backpack or suitcase on wheels. Store it somewhere you can easily
-get to it.
-Recommended items to consider including in your Evacuation kit:</FormLabel>
-          <FormGroup>
-          {this.state.items.map((item, index) => (
-            <FormControlLabel
-            control={
-              <Checkbox key={index} checked={false} onChange={(event) => this.handleCheckChange(event, index)} value={item} />
-            }
-            label={item.item}
-          />
-          ))
-          }
-          </FormGroup>
-          </FormControl>
-          
-                <form className={classes.container}>
+                    )) : <Typography variant="h6" align="center">
+                    You don't have an evacuation kit yet! Start creating one! 
+            </Typography>
+                  }
+                </List>
+                <form>
                   <TextField
                     id="item"
                     type="text"
@@ -131,34 +184,42 @@ Recommended items to consider including in your Evacuation kit:</FormLabel>
                     margin="normal"
                     required
                     autoFocus
+                    value={this.state.item}
                     onChange={this.handleInputChange}
+                    helperText="List any other additional items that your family might need"
                   />
-                  <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={this.handleFormSubmit}>
+                  <Button size="medium" type="submit" variant="contained" color="primary" className={classes.button} onClick={this.handleFormSubmit}>
                     SUBMIT
-      </Button>
+                  </Button>
                 </form>
-                {/* {this.state.items.length ? (
-                  <List>
-                    {this.state.items.map(item => {
-                      return (
-                        <ListItem key={item._id}>
-                          <Typography>
-                            {item.item}
-                          </Typography>
-                          <Link to={`/evacuationlists/${item._id}`} />
-                          <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.deleteEvacuationlists(item._id)}>
-                            Delete
-                        <Delete className={classes.rightIcon} />
-                          </Button>
-                        </ListItem>
-                      );
-                    })}
-                  </List>
-                ) : (
-                    <Typography variant="subtitle1">
-                      No Results to Display
-            </Typography>
-                  )} */}
+                {
+                  this.state.modal ? (
+                  <SimpleModal
+                    ariaLabel="Edit"
+                    ariaDescription="Edit current item"
+                    open={this.state.modal}
+                    onClose={this.handleCloseModal}
+                  >
+                    <Typography variant="h6">
+                      Edit
+                    </Typography>
+                    <form className={classes.container}>
+                      <TextField
+                        id="editItem"
+                        label="Item"
+                        name="editItem"
+                        type="text"
+                        className={classes.textField}
+                        value={this.state.editItem}
+                        onChange={this.handleInputChange}
+                        margin="normal"
+                      />
+                      <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={this.updateItem}>
+                        Save
+                      </Button>
+                    </form>
+                  </SimpleModal>) : null
+                }
               </Paper>
             </Grid>
           </Grid>
