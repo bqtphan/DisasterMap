@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import API from "../../utils/API";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Grid, Typography, TextField, Button, List, ListItem, ListItemText, Checkbox, FormLabel, FormGroup, IconButton, ListItemSecondaryAction, FormControlLabel, FormControl } from '@material-ui/core';
+import { Paper, Grid, Typography, TextField, Button, List, ListItem, ListItemText, Checkbox, IconButton, ListItemSecondaryAction } from '@material-ui/core';
 import { Delete, Edit } from '@material-ui/icons';
 import SimpleModal from '../../components/SimpleModal';
 
