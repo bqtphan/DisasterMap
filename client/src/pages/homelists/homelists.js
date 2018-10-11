@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import API from "../../utils/API";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Grid, Typography, TextField, Button, List, ListItem, ListItemText, Checkbox, FormLabel, FormGroup, FormControlLabel, FormControl, InputAdornment, IconButton } from '@material-ui/core';
+import { Paper, Grid, Typography, TextField, Button, Checkbox, FormLabel, FormGroup, FormControlLabel, FormControl, InputAdornment, IconButton } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 import { Delete } from '@material-ui/icons';
 
@@ -137,14 +137,13 @@ class Homelists extends Component {
 
   loadHomelists = () => {
     API.getAllHomelists()
-      .then(res => (
-        res.data ? this.setState({ items: res.data }) : this.setState({ items: recommendedItems })
-      ))
+      .then(res => this.setState({ items: res.data }))
+      // : this.setState({ items: recommendedItems })
       .catch(err => console.log(err));
   };
 
   deleteHomelists = id => {
-    API.deleteHomelists(id)
+    API.deletHomelists(id)
       .then(res => this.getAllHomelists())
       .catch(err => console.log(err));
   };
@@ -158,9 +157,7 @@ class Homelists extends Component {
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.item) {
-      API.saveHomelists({
-        item: this.state.item,
-      })
+      API.savehomelists({item: this.state.item})
         .then(res => this.loadHomelists())
         .catch(err => console.log(err));
     }
@@ -233,8 +230,10 @@ Recommended items to consider including in your Stay-at-Home Kit:</FormLabel>
                     margin="normal"
                     required
                     autoFocus
+                    onChange={this.handleInputChange}
+
                   />
-                  <Button type="submit" variant="contained" color="primary" className={classes.button}>
+                  <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={this.handleFormSubmit}>
                     SUBMIT
       </Button>
                 </form>
