@@ -5,6 +5,8 @@ import { AppBar, Toolbar, Typography, IconButton, Button, TextField, InputAdornm
 import { Menu, PermIdentity, Lock, AccountCircle } from '@material-ui/icons';
 import LoginModal from './SimpleModal';
 import { Redirect } from 'react-router-dom';
+import { auth } from '../components/firebase';
+
 
 const drawerWidth = 240;
 
@@ -42,6 +44,15 @@ const styles = theme => ({
 });
 
 const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, modal, email, password, onInputChange, onLoginSubmit, userLogin }) => {
+
+    onLoginSubmit = () => {
+        const { email, password } = this.state
+        if (email && password) {
+            auth.doSignInWithEmailAndPassword(email, password)
+                .then(res => console.log("It works"))
+                .catch(err => console.log(err))
+        }
+    }
 
     return (
         <Fragment>
@@ -126,7 +137,7 @@ const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, mod
 
                             <Button type="submit" variant="contained" color="primary" className={classes.button}>
                                 Log in
-      </Button>
+                            </Button>
                         </form>
                     </LoginModal>
                 </Toolbar>

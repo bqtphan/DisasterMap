@@ -1,17 +1,14 @@
-// // Initialize Firebase
-// var config = {
-//     apiKey: "AIzaSyArWZtAOVwy219cNjZDMMT1k_IOhJAP8Yk",
-//     authDomain: "disastermap-2b555.firebaseapp.com",
-//     databaseURL: "https://disastermap-2b555.firebaseio.com",
-//     projectId: "disastermap-2b555",
-//     storageBucket: "disastermap-2b555.appspot.com",
-//     messagingSenderId: "764441341779"
-// };
+// Initialize Firebase
+const config = {
+    apiKey: "AIzaSyArWZtAOVwy219cNjZDMMT1k_IOhJAP8Yk",
+    authDomain: "disastermap-2b555.firebaseapp.com",
+    databaseURL: "https://disastermap-2b555.firebaseio.com",
+    projectId: "disastermap-2b555",
+    storageBucket: "disastermap-2b555.appspot.com",
+    messagingSenderId: "764441341779"
+};
 
-// firebase.initializeApp(config);
-
-// const auth = firebase.auth();
-
+firebase.initializeApp(config);
 
 // $("#submitNewUser").on("click", function (event) {
 //     // prevent page from refreshing when form tries to submit itself
