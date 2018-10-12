@@ -4,7 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid, Typography, TextField, Checkbox, InputAdornment, Button, Stepper, StepContent, Step, StepLabel } from '@material-ui/core';
 import { Lock, Person, Email } from '@material-ui/icons'
 import API from '../utils/API';
-import { auth } from '../components/firebase';
+// import { auth } from '../components/firebase';
+import base from '../firebase1';
+import { withRouter } from "react-router";
 
 const styles = theme => ({
     paper: {
@@ -87,21 +89,33 @@ class SignUp extends Component {
     };
 
 
-    handleRegisterSubmit = (event) => {
+    handleRegisterSubmit = async event => {
         event.preventDefault();
         const { name, email, password, password2 } = this.state
         if (name && email && password && password2) {
-            auth.doCreateUserWithEmailAndPassword (email, password)
-            .then(function (user) {
-                console.log(user);
-                // API.saveUser({ name, email })
-                // .then(result => console.log("It works"))
-                // .catch(err => console.log(err))
-            }).catch(function (error) {
-            console.log(error.message);
-            });
-        }
+            try {
+                const user = await base
+                  .auth()
+                  .createUserWithEmailAndPassword(email, password);
+                  console.log(user)
+                this.props.history.push("/");
+            } catch (error) {
+                alert(error);
+            }
+        };
     }
+
+    //         auth.doCreateUserWithEmailAndPassword (email, password)
+    //         .then(function (user) {
+    //             console.log(user);
+    //             // API.saveUser({ name, email })
+    //             // .then(result => console.log("It works"))
+    //             // .catch(err => console.log(err))
+    //         }).catch(function (error) {
+    //         console.log(error.message);
+    //         });
+    //     }
+    // }
 
     render() {
         const { classes } = this.props
