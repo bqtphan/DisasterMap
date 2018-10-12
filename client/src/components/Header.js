@@ -45,15 +45,6 @@ const styles = theme => ({
 
 const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, modal, email, password, onInputChange, onLoginSubmit, userLogin }) => {
 
-    onLoginSubmit = () => {
-        const { email, password } = this.state
-        if (email && password) {
-            auth.doSignInWithEmailAndPassword(email, password)
-                .then(res => console.log("It works"))
-                .catch(err => console.log(err))
-        }
-    }
-
     return (
         <Fragment>
             <AppBar className={classes.appBar}>

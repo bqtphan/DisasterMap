@@ -72,9 +72,15 @@ class App extends Component {
     handleLoginSubmit = event => {
     // Preventing the default behavior of the Login submit (which is to refresh the page)
     event.preventDefault();
+
+    const { email, password } = this.state
+    if (email && password) {
+        auth.doSignInWithEmailAndPassword(email, password)
+            .then(res => console.log("It works"))
+            .catch(err => console.log(err))
+    }
+
     
-    // ==================================
-    // FIREBASE AUTHENTICATION GOES HERE 
 
     // TESTING WITH DUMMY DATA: EMAIL-David PW-code
     if(this.state.email === "David" && this.state.password === "code") {
