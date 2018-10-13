@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import API from "../../utils/API";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Grid, Typography, TextField, Button, Checkbox, FormLabel, FormGroup, FormControlLabel, FormControl, InputAdornment, IconButton } from '@material-ui/core';
-import { Link } from 'react-router-dom'
-import { Delete } from '@material-ui/icons';
+import { Paper, Grid, Typography, TextField, Button, Checkbox, List, ListItemText, ListItemSecondaryAction, ListItem, IconButton } from '@material-ui/core';
+import { Delete, Edit } from '@material-ui/icons';
+import SimpleModal from '../../components/SimpleModal';
 
 const styles = theme => ({
   paper: {
@@ -30,6 +30,9 @@ const styles = theme => ({
   formControl: {
     margin: theme.spacing.unit * 3,
   },
+  slashedText: {
+    textDecoration: "line-through"
+  }
 });
 
 let recommendedItems = [
@@ -126,10 +129,11 @@ let recommendedItems = [
 class Homelists extends Component {
   state = {
     items: [],
-    item: ""
+    item: "",
+    editItem: "",
+    editItemId: "",
+    modal: false,
   };
-
-
 
   componentDidMount() {
     this.loadHomelists();
@@ -137,16 +141,24 @@ class Homelists extends Component {
 
   loadHomelists = () => {
     API.getAllHomelists()
-      .then(res => this.setState({ items: res.data }))
-      // : this.setState({ items: recommendedItems })
+      .then(res => this.setState({ items: res.data, item: "" }))
       .catch(err => console.log(err));
   };
 
   deleteHomelists = id => {
-    API.deletHomelists(id)
-      .then(res => this.getAllHomelists())
+    API.deletehomelists(id)
+      .then(res => this.loadHomelists())
       .catch(err => console.log(err));
   };
+
+  updateItem = () => {
+    if (this.state.editItem) {
+      API.updatehomelists(this.state.editItemId, { item: this.state.editItem })
+        .then(res => this.loadEvacuationlists())
+        .catch(err => console.log(err));
+    }
+  }
+
   handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({
@@ -157,27 +169,31 @@ class Homelists extends Component {
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.item) {
-      API.savehomelists({item: this.state.item})
+      API.savehomelists({ item: this.state.item })
         .then(res => this.loadHomelists())
         .catch(err => console.log(err));
     }
   };
 
-  handleCheckChange = (event, index) => {
-
-    let item = { ...this.state.items[index] }
-    item.checked = event.target.checked
-    const items = [...this.state.items]
-    items[index] = item;
-
-    this.setState({
-      items
-    })
+  handleCheckChange = (event, id) => {
+    let item = this.state.items.filter(x => x._id === id)
+    item[0].checked = event.target.checked
+    API.updatehomelists(id, item[0])
+      .then(res => this.loadHomelists())
+      .catch(err => console.log(err));
   }
+
+  handleOpenModal = (id) => {
+    let editItem = this.state.items.filter(x => x._id === id)[0].item
+    this.setState({ modal: true, editItem, editItemId: id });
+  };
+
+  handleCloseModal = () => {
+    this.setState({ modal: false, editItem: "", editItemId: "" });
+  };
 
   render() {
     const { classes } = this.props;
-    const { items } = this.state
 
     return (
       <Grid container spacing={8}>
@@ -192,35 +208,44 @@ class Homelists extends Component {
                 <Typography variant="h6" align="center">
                   Home Kit
           </Typography>
+                <Typography variant="body1">
+                  Keep a Stay-at-Home Kit for when you need to shelter at home for an extended period.
+          </Typography>
 
-                <FormControl component="fieldset" className={classes.formControl}>
-                  <FormLabel component="legend">Stay-at-Home Kit
-        Keep a Stay-at-Home Kit for when you need to shelter at home for an extended period.
-Recommended items to consider including in your Stay-at-Home Kit:</FormLabel>
-                  <FormGroup>
-                    {
-                      items.map((item, index) => (
-                          <FormControlLabel
-                            control={
-                              <Checkbox key={index} checked={item.checked} onChange={(event) => this.handleCheckChange(event, index)} value={item.item} />
-                            }
-                            label={item.item}
-                            endAdornment={
-                              <InputAdornment position="end">
-                                <IconButton
-                                  aria-label="Delete"
-                                  onClick={this.deleteHomelists}
-                                >
-                                  <Delete />
-                                </IconButton>
-                              </InputAdornment>
-                            }
+                <List>
+                  {
+                    this.state.items.length ?
+                      this.state.items.map((item, index) => (
+                        <ListItem
+                          key={index}
+                          dense
+                          className={classes.listItem}
+                        >
+                          <Checkbox
+                            checked={item.checked}
+                            tabIndex={-1}
+                            disableRipple
+                            onChange={(event) => this.handleCheckChange(event, item._id)}
                           />
-                        ))
-                    }
-                  </FormGroup>
-                </FormControl>
-                <form className={classes.container} onSubmit={this.handleFormSubmit}>
+                          <ListItemText primary={item.item} className={item.checked && classes.slashedText} />
+                          {
+                            !item.checked ? (<ListItemSecondaryAction >
+                              <IconButton aria-label="Edit" >
+                                <Edit onClick={() => this.handleOpenModal(item._id)} />
+                              </IconButton>
+                              <IconButton aria-label="Delete" >
+                                <Delete onClick={() => this.deleteHomelists(item._id)} />
+                              </IconButton>
+                            </ListItemSecondaryAction>)
+                              : null
+                          }
+                        </ListItem>
+                      )) : <Typography variant="h6" align="center">
+                        You don't have an home kit yet! Start creating one!
+            </Typography>
+                  }
+                </List>
+                <form>
                   <TextField
                     id="item"
                     type="text"
@@ -230,33 +255,42 @@ Recommended items to consider including in your Stay-at-Home Kit:</FormLabel>
                     margin="normal"
                     required
                     autoFocus
+                    value={this.state.item}
                     onChange={this.handleInputChange}
-
+                    helperText="List any other additional items that your family might need"
                   />
-                  <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={this.handleFormSubmit}>
+                  <Button size="medium" type="submit" variant="contained" color="primary" className={classes.button} onClick={this.handleFormSubmit}>
                     SUBMIT
-      </Button>
+                  </Button>
                 </form>
-
-                {/* {this.state.items.length ? (
-                  <List>
-                    {this.state.items.map(items => {
-                      return (
-                        <ListItem key={items._id}>
-                          <Link to={`/homelists/${items._id}`} />
-                          <Button variant="contained" color="secondary" className={classes.button} onClick={() => this.deleteHomelists(items._id)}>
-                            Delete
-                        <Delete className={classes.rightIcon} />
-                          </Button>
-                        </ListItem>
-                      );
-                    })}
-                  </List>
-                ) : (
-                    <Typography variant="subtitle1">
-                      No Results to Display
-            </Typography>
-                  )} */}
+                {
+                  this.state.modal ? (
+                    <SimpleModal
+                      ariaLabel="Edit"
+                      ariaDescription="Edit current item"
+                      open={this.state.modal}
+                      onClose={this.handleCloseModal}
+                    >
+                      <Typography variant="h6">
+                        Edit
+                    </Typography>
+                      <form className={classes.container}>
+                        <TextField
+                          id="editItem"
+                          label="Item"
+                          name="editItem"
+                          type="text"
+                          className={classes.textField}
+                          value={this.state.editItem}
+                          onChange={this.handleInputChange}
+                          margin="normal"
+                        />
+                        <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={this.updateItem}>
+                          Save
+                      </Button>
+                      </form>
+                    </SimpleModal>) : null
+                }
               </Paper>
             </Grid>
           </Grid>

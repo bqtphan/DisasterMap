@@ -13,6 +13,9 @@ export default {
   deletehomelists: function(id) {
     return axios.delete("/api/homelists/" + id);
   },
+  updatehomelists: function(id, data) {
+    return axios.put("/api/homelists/" + id, data);
+  },
   // Saves a homelist to the database
   savehomelists: function(homelists) {
     return axios.post("/api/homelists", homelists);
@@ -32,6 +35,9 @@ export default {
   // Saves a evacuation list to the database
   saveevacuationlists: function(evacuationlists) {
     return axios.post("/api/evacuationlists", evacuationlists);
+  },
+  updateevacuationlists: function(id, evacuationlists) {
+    return axios.put("/api/evacuationlists/" + id, evacuationlists);
   },
   getMapMessages: () => {
     return axios.get("/api/mapmessages");
