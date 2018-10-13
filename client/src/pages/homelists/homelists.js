@@ -22,109 +22,23 @@ const styles = theme => ({
     width: '80%',
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing.unit * 2,
   },
   rightIcon: {
-    marginLeft: theme.spacing.unit,
+  marginLeft: theme.spacing.unit * 2,
   },
   formControl: {
     margin: theme.spacing.unit * 3,
   },
   slashedText: {
     textDecoration: "line-through"
+  },
+  icons: {
+    padding: '10px',
+    zIndex: '101'
   }
 });
 
-let recommendedItems = [
-  {
-    item: "Water (one gallon per person per day, for drinking and sanitation—up to a 7-day supply)",
-    checked: false
-  },
-  {
-    item: "Non-perishable food (up to a 7-day supply per person)",
-    checked: false
-  },
-  {
-    item: "Battery-powered radio (with extra batteries) or hand-crank radio",
-    checked: false
-  },
-  {
-    item: "Weather radio with tone alert and extra batteries",
-    checked: false
-  },
-  {
-    item: "Flashlight and extra batteries",
-    checked: false
-  },
-  {
-    item: "First-aid supplies",
-    checked: false
-  },
-  {
-    item: "Whistle to signal for help",
-    checked: false
-  },
-  {
-    item: "Filter mask or cotton t-shirt, to help filter the air",
-    checked: false
-  },
-  {
-    item: "Moist towelettes, garbage bags, soap, disinfectant, and plastic ties for personal sanitation",
-    checked: false
-  },
-  {
-    item: "Wrench or pliers to turn off utilities (water and electric)",
-    checked: false
-  },
-  {
-    item: "Manual can opener if your kit contains canned food",
-    checked: false
-  },
-  {
-    item: "Plastic sheeting and duct tape to shelter-in-place (see pages 26-27)",
-    checked: false
-  },
-  {
-    item: "Plastic tarps for emergency roof repair",
-    checked: false
-  },
-  {
-    item: "Items for unique family needs, such as daily prescription medications, infant formula, or diapers",
-    checked: false
-  },
-  {
-    item: "Mess kits, paper cups, plates, and plastic utensils",
-    checked: false
-  },
-  {
-    item: "Cash and change",
-    checked: false
-  },
-  {
-    item: "Paper towels",
-    checked: false
-  },
-  {
-    item: "Fire extinguisher",
-    checked: false
-  },
-  {
-    item: "Matches in a waterproof container",
-    checked: false
-  },
-  {
-    item: "Rain gear, sturdy shoes, long pants, and gloves",
-    checked: false
-  },
-  {
-    item: "Important family documents such as copies of insurance policies, identification, birth certificates, passports, and bank account records in a waterproof, portable container",
-    checked: false
-  },
-  {
-    item: "A stuffed animal or toy for your child and something to help occupy their time, like books or coloring books. If this includes a hand-held video game, make sure you have extra batteries",
-    checked: false
-  }
-]
 
 class Homelists extends Component {
   state = {
@@ -221,23 +135,26 @@ class Homelists extends Component {
                           dense
                           className={classes.listItem}
                         >
+                          <ListItemText primary={item.item} className={item.checked && classes.slashedText} />
                           <Checkbox
+                          className={classes.icons}
                             checked={item.checked}
                             tabIndex={-1}
+                            // disabled={item.checked}
                             disableRipple
                             onChange={(event) => this.handleCheckChange(event, item._id)}
                           />
-                          <ListItemText primary={item.item} className={item.checked && classes.slashedText} />
                           {
-                            !item.checked ? (<ListItemSecondaryAction >
+                            // !item.checked ? 
+                            (<ListItemSecondaryAction >
                               <IconButton aria-label="Edit" >
                                 <Edit onClick={() => this.handleOpenModal(item._id)} />
                               </IconButton>
-                              <IconButton aria-label="Delete" >
+                              <IconButton  aria-label="Delete" >
                                 <Delete onClick={() => this.deleteHomelists(item._id)} />
                               </IconButton>
                             </ListItemSecondaryAction>)
-                              : null
+                              // : null
                           }
                         </ListItem>
                       )) : <Typography variant="h6" align="center">

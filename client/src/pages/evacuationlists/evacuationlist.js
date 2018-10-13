@@ -22,34 +22,22 @@ const styles = theme => ({
     width: '80%',
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing.unit * 2,
   },
   rightIcon: {
-    marginLeft: theme.spacing.unit,
+    marginLeft: theme.spacing.unit *2,
   },
   formControl: {
     margin: theme.spacing.unit * 3,
   },
   slashedText: {
     textDecoration: "line-through"
+  },
+  icons: {
+    padding: '10px',
+    zIndex: '101'
   }
 });
-
-let recommendedItems = [
-  {item:"Copies of your important papers in a waterproof bag",checked: false},
-  {item:"Extra set of car and house keys", checked: false}, 
-  {item:"Extra mobile phone charger", checked: false},
-  {item:"Bottled water and snacks such as energy or granola bars",checked: false},
-  {item:"First-aid supplies, flashlight, and whistle",checked: false},
-  {item:"Battery-powered or hand-crank radio (with extra batteries, if needed)",checked: false},
-  {item:"A list of the medications each member of your family needs and at least a 14-day supply of each medication",checked: false},
-  {item:"Toothpaste, toothbrushes, wet cleansing wipes, and so on",checked: false},
-  {item:"Contact and meeting place information for your family and a map of your local area",checked: false},
-  {item:"A stuffed animal or toy for your child and something to help occupy their time, like books or coloring books. If this includes a hand-held video game, make sure you have extra batteries",checked: false},
-  {item:"Rain ponchos",checked: false},
-  {item:"External mobile phone battery pack or solar charger. Some hand-crank flashlights will also include a phone charger",checked: false},
-  {item:"Escape Tool for your car", checked: false}
-]
 
 class Evacuationlists extends Component {
   state = {
@@ -148,13 +136,14 @@ class Evacuationlists extends Component {
                         dense
                         className={classes.listItem}
                       >
+                        <ListItemText primary={item.item} className={item.checked && classes.slashedText}/>
                         <Checkbox
+                          className={classes.icons}
                           checked={item.checked}
                           tabIndex={-1}
                           disableRipple
                           onChange={(event) => this.handleCheckChange(event, item._id)}
                         />
-                        <ListItemText primary={item.item} className={item.checked && classes.slashedText}/>
                         {
                           !item.checked ? (<ListItemSecondaryAction >
                           <IconButton aria-label="Edit" >
