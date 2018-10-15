@@ -33,7 +33,6 @@ const styles = theme => ({
     textField: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
-        width: 200,
     },
     button: {
         margin: theme.spacing.unit,
@@ -84,9 +83,9 @@ const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, mod
                         open={modal}
                         onClose={onCloseModal}
                     >
-                        <Typography variant="h6">
-                            Welcome
-                    </Typography>
+                        <Typography component="h1" variant="h6" align="center">
+            Log in
+          </Typography>
                         <form className={classes.container} onSubmit={onLoginSubmit}>
 
                             <TextField
@@ -98,6 +97,7 @@ const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, mod
                                 value={email}
                                 onChange={onInputChange}
                                 margin="normal"
+                                fullWidth
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start"><PermIdentity /></InputAdornment>,
                                 }}
@@ -115,6 +115,7 @@ const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, mod
                                 value={password}
                                 onChange={onInputChange}
                                 margin="normal"
+                                fullWidth
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start"><Lock /></InputAdornment>,
                                 }}
@@ -126,7 +127,7 @@ const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, mod
                                 label="Remember me"
                             />
 
-                            <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={ onCloseModal }>
+                            <Button type="submit" variant="contained" color="primary" className={classes.button} fullWidth onClick={ onCloseModal }>
                                 Log in
                             </Button>
                         </form>

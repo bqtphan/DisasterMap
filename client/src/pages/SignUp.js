@@ -6,7 +6,7 @@ import { Lock, Person, Email } from '@material-ui/icons'
 import API from '../utils/API';
 import { auth } from '../components/firebase';
 // import { withRouter } from "react-router";
-import { withRouter} from 'react-router-dom'; 
+import { withRouter } from 'react-router-dom';
 
 const styles = theme => ({
     paper: {
@@ -14,7 +14,7 @@ const styles = theme => ({
         textAlign: 'center',
         color: theme.palette.text.secondary,
     },
-    container: {
+    formContainer: {
         display: 'flex',
         flexWrap: 'wrap',
     },
@@ -25,31 +25,13 @@ const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
     },
-    instructions: {
-        marginTop: theme.spacing.unit,
-        marginBottom: theme.spacing.unit,
+    content: {
+        flexGrow: 1,
+        backgroundColor: theme.palette.background.default,
+        padding: theme.spacing.unit * 3,
     },
-    steppersRoot: {
-        width: '90%',
-    },
+    toolbar: theme.mixins.toolbar,
 });
-
-// function getSteps() {
-//     return ['Step 1', 'Step 2', 'Step 3'];
-// }
-
-// function getStepContent(step) {
-//     switch (step) {
-//         case 0:
-//             return 'Select campaign settings...';
-//         case 1:
-//             return 'What is an ad group anyways?';
-//         case 2:
-//             return 'This is the bit I really care about!';
-//         default:
-//             return 'Unknown step';
-//     }
-// }
 
 class SignUp extends Component {
     state = {
@@ -63,20 +45,6 @@ class SignUp extends Component {
         password2: ""
         // activeStep: 0,
     }
-
-    // handleNext = () => {
-    //     const { activeStep } = this.state;
-    //     let {  } = this.state;
-    //     this.setState({
-    //         activeStep: activeStep + 1
-    //     });
-    // };
-
-    // handleBack = () => {
-    //     this.setState(state => ({
-    //         activeStep: state.activeStep - 1,
-    //     }));
-    // };
 
     handleInputChange = event => {
         // Getting the value and name of the input which triggered the change
@@ -95,101 +63,56 @@ class SignUp extends Component {
 
         const {
             history,
-          } = this.props;
+        } = this.props;
 
         sessionStorage.clear();
-         // Store all content into sessionStorage
+        // Store all content into sessionStorage
         sessionStorage.setItem("name", name);
         sessionStorage.setItem("email", email);
 
-        console.log(name,email,password,password2)
-            auth.doCreateUserWithEmailAndPassword (email, password)
+        console.log(name, email, password, password2)
+        auth.doCreateUserWithEmailAndPassword(email, password)
             .then(function (user) {
                 API.saveUser({ name, email })
-                .then(result => console.log(user))
-                .catch(err => console.log(err))
-                history.push("/");  
+                    .then(result => console.log(user))
+                    .catch(err => console.log(err))
+                history.push("/");
             }).catch(function (error) {
-            console.log(error.message);
+                console.log(error.message);
             });
     }
 
     render() {
         const { classes } = this.props
-        // const steps = getSteps();
-        // const { activeStep } = this.state;
 
         return (
-            <Grid container spacing={24}>
-                <Grid item xs={12} md={8}>
-                    <Paper className={classes.paper}>
-                        <Typography variant="h6">
-                            Sign up
-              </Typography>
-                        <form className={classes.container} onSubmit={this.handleRegisterSubmit}>
+            <main className={classes.content}>
+                <div className={classes.toolbar} />
+                <Grid container spacing={24}>
+                    <Grid item xs={12} md={8}>
+                        <Paper className={classes.paper}>
+                            <Typography component="h1" variant="h6" align="center">
+                                Sign up
+          </Typography>
+                            <form className={classes.formContainer} onSubmit={this.handleRegisterSubmit}>
 
-                            {/* <div className={classes.steppersRoot}>
-                                <Stepper activeStep={activeStep}>
-                                    {steps.map((label, index) => {
-                                        const props = {};
-                                        const labelProps = {};
-
-                                        return (
-                                            <Step key={label} {...props}>
-                                                <StepLabel {...labelProps}>{label}</StepLabel>
-                                            </Step>
-                                        );
-                                    })}
-                                </Stepper>
-                                <div>
-                                    {activeStep === steps.length ? (
-                                        <div>
-                                            <Typography className={classes.instructions}>
-                                                All steps completed - you&quot;re finished
-              </Typography>
-                                        </div>
-                                    ) : (
-                                            <div>
-                                                <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
-                                                <div>
-                                                    <Button
-                                                        disabled={activeStep === 0}
-                                                        onClick={this.handleBack}
-                                                        className={classes.button}
-                                                    >
-                                                        Back
-                </Button>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={this.handleNext}
-                                                        className={classes.button}
-                                                    >
-                                                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        )}
-                                </div>
-                            </div> */}
-
-                            <TextField
-                                id="name"
-                                label="Full Name"
-                                name="name"
-                                type="text"
-                                className={classes.textField}
-                                value={this.state.firstName}
-                                onChange={this.handleInputChange}
-                                margin="normal"
-                                required
-                                InputProps={{
-                                    startAdornment: <InputAdornment position="start"><Person /></InputAdornment>,
-                                }}
-                                autoFocus
-                                fullWidth
-                            />
-                            {/* <TextField
+                                <TextField
+                                    id="name"
+                                    label="Full Name"
+                                    name="name"
+                                    type="text"
+                                    className={classes.textField}
+                                    value={this.state.firstName}
+                                    onChange={this.handleInputChange}
+                                    margin="normal"
+                                    required
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start"><Person /></InputAdornment>,
+                                    }}
+                                    autoFocus
+                                    fullWidth
+                                />
+                                {/* <TextField
                                 id="lastName"
                                 label="Last Name"
                                 name="lastName"
@@ -204,64 +127,65 @@ class SignUp extends Component {
                                 required
                                 fullWidth
                             /> */}
-                            <TextField
-                                id="email"
-                                label="Email"
-                                name="email"
-                                type="email"
-                                className={classes.textField}
-                                value={this.state.email}
-                                onChange={this.handleInputChange}
-                                margin="normal"
-                                required
-                                fullWidth
-                                InputProps={{
-                                    startAdornment: <InputAdornment position="start"><Email /></InputAdornment>,
-                                }}
-                                autoComplete="email"
-                            />
+                                <TextField
+                                    id="email"
+                                    label="Email"
+                                    name="email"
+                                    type="email"
+                                    className={classes.textField}
+                                    value={this.state.email}
+                                    onChange={this.handleInputChange}
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start"><Email /></InputAdornment>,
+                                    }}
+                                    autoComplete="email"
+                                />
 
-                            <TextField
-                                id="password"
-                                label="Password"
-                                name="password"
-                                type="password"
-                                className={classes.textField}
-                                value={this.state.password}
-                                onChange={this.handleInputChange}
-                                margin="normal"
-                                InputProps={{
-                                    startAdornment: <InputAdornment position="start"><Lock /></InputAdornment>,
-                                }}
-                                required
-                                fullWidth
-                                autoComplete="current-password"
-                            />
-                            <TextField
-                                id="password2"
-                                label="Confirm Password"
-                                name="password2"
-                                type="password"
-                                className={classes.textField}
-                                value={this.state.password2}
-                                onChange={this.handleInputChange}
-                                margin="normal"
-                                InputProps={{
-                                    startAdornment: <InputAdornment position="start"><Lock /></InputAdornment>,
-                                }}
-                                required
-                                fullWidth
-                                autoComplete="current-password"
-                            />
+                                <TextField
+                                    id="password"
+                                    label="Password"
+                                    name="password"
+                                    type="password"
+                                    className={classes.textField}
+                                    value={this.state.password}
+                                    onChange={this.handleInputChange}
+                                    margin="normal"
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start"><Lock /></InputAdornment>,
+                                    }}
+                                    required
+                                    fullWidth
+                                    autoComplete="current-password"
+                                />
+                                <TextField
+                                    id="password2"
+                                    label="Confirm Password"
+                                    name="password2"
+                                    type="password"
+                                    className={classes.textField}
+                                    value={this.state.password2}
+                                    onChange={this.handleInputChange}
+                                    margin="normal"
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start"><Lock /></InputAdornment>,
+                                    }}
+                                    required
+                                    fullWidth
+                                    autoComplete="current-password"
+                                />
 
-                            <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={(e) => this.handleRegisterSubmit(e,this.state)}>
-                                Set up your Account
+                                <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={(e) => this.handleRegisterSubmit(e, this.state)}>
+                                    Set up your Account
 </Button>
-                        </form>
+                            </form>
 
-                    </Paper>
+                        </Paper>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </main>
         );
     }
 }

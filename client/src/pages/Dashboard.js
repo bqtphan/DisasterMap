@@ -4,18 +4,26 @@ import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid, Typography } from '@material-ui/core';
 
 const styles = theme => ({
-    paper: {
-      padding: theme.spacing.unit * 2,
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    }
-  });
+  paper: {
+    padding: theme.spacing.unit * 2,
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+  content: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing.unit * 3,
+  },
+  toolbar: theme.mixins.toolbar,
+});
 
 class Dashboard extends Component {
-    
-    render() {
-        const { classes } = this.props
+
+  render() {
+    const { classes } = this.props
     return (
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <Paper className={classes.paper}>
@@ -26,12 +34,13 @@ class Dashboard extends Component {
               </Paper>
           </Grid>
         </Grid>
-      );
-    }
+      </main>
+    );
+  }
 }
 
 Dashboard.propTypes = {
-    classes: PropTypes.object.isRequired,
-  };
-  
+  classes: PropTypes.object.isRequired,
+};
+
 export default withStyles(styles, { withTheme: true })(Dashboard)
