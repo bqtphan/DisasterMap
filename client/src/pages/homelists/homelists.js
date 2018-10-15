@@ -11,6 +11,7 @@ const styles = theme => ({
     padding: theme.spacing.unit * 2,
     textAlign: 'center',
     color: theme.palette.text.secondary,
+    minHeight: '100vh'
   },
   container: {
     display: 'flex',
@@ -32,6 +33,10 @@ const styles = theme => ({
   },
   slashedText: {
     textDecoration: "line-through"
+  },
+  containerScroll: {
+    overflow: 'auto',
+    height: '100%'
   }
 });
 
@@ -196,7 +201,7 @@ class Homelists extends Component {
     const { classes } = this.props;
 
     return (
-      <Grid container spacing={8}>
+      <Grid container spacing={0} className={classes.containerScroll}>
         <Grid item xs={12} md={12}>
           <Grid
             container
@@ -230,10 +235,10 @@ class Homelists extends Component {
                           <ListItemText primary={item.item} className={item.checked && classes.slashedText} />
                           {
                             !item.checked ? (<ListItemSecondaryAction >
-                              <IconButton aria-label="Edit" >
+                              <IconButton aria-label="Edit" title="Edit">
                                 <Edit onClick={() => this.handleOpenModal(item._id)} />
                               </IconButton>
-                              <IconButton aria-label="Delete" >
+                              <IconButton aria-label="Delete" title="Delete">
                                 <Delete onClick={() => this.deleteHomelists(item._id)} />
                               </IconButton>
                             </ListItemSecondaryAction>)

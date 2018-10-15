@@ -5,12 +5,14 @@ import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid, Typography, TextField, Button, List, ListItem, ListItemText, Checkbox, IconButton, ListItemSecondaryAction } from '@material-ui/core';
 import { Delete, Edit } from '@material-ui/icons';
 import SimpleModal from '../../components/SimpleModal';
+// import { connect } from 'react-redux';
 
 const styles = theme => ({
   paper: {
     padding: theme.spacing.unit * 2,
     textAlign: 'center',
     color: theme.palette.text.secondary,
+    minHeight: '100vh'
   },
   container: {
     display: 'flex',
@@ -32,6 +34,10 @@ const styles = theme => ({
   },
   slashedText: {
     textDecoration: "line-through"
+  },
+  containerScroll: {
+    overflow: 'auto',
+    maxHeight: '100vh'
   }
 });
 
@@ -122,16 +128,17 @@ class Evacuationlists extends Component {
     const { classes } = this.props;
 
     return (
-      <Grid container spacing={0}>
+      <Grid container spacing={0} className={classes.scroll}>
         <Grid item xs={12} md={12}>
           <Grid
             container
             spacing={0}
             justify="center"
+            
           >
             <Grid item xs={12} md={10}>
               <Paper className={classes.paper}>
-                <Typography variant="h6" align="center">
+                <Typography variant="h6" align="center" color="textPrimary">
                   Evacuation Kit
           </Typography>
                 <Typography variant="body1">
@@ -157,10 +164,10 @@ class Evacuationlists extends Component {
                         <ListItemText primary={item.item} className={item.checked && classes.slashedText}/>
                         {
                           !item.checked ? (<ListItemSecondaryAction >
-                          <IconButton aria-label="Edit" >
+                          <IconButton aria-label="Edit"title="Edit" >
                             <Edit onClick={() => this.handleOpenModal(item._id)} />
                           </IconButton>
-                          <IconButton aria-label="Delete" >
+                          <IconButton aria-label="Delete" title="Delete" >
                             <Delete onClick={() => this.deleteEvacuationlists(item._id)} />
                           </IconButton>
                         </ListItemSecondaryAction>) 
@@ -233,4 +240,16 @@ Evacuationlists.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
+const mapStateToProps = (state) => {
+  return {
+    
+  }
+} 
+const mapDispatchToProps = (dispatch) => {
+  return {
+
+  }
+} 
+
+// export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(Evacuationlists))
 export default withStyles(styles, { withTheme: true })(Evacuationlists)

@@ -23,31 +23,7 @@ const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
     },
-    instructions: {
-        marginTop: theme.spacing.unit,
-        marginBottom: theme.spacing.unit,
-    },
-    steppersRoot: {
-        width: '90%',
-    },
 });
-
-function getSteps() {
-    return ['Step 1', 'Step 2', 'Step 3'];
-}
-
-function getStepContent(step) {
-    switch (step) {
-        case 0:
-            return 'Select campaign settings...';
-        case 1:
-            return 'What is an ad group anyways?';
-        case 2:
-            return 'This is the bit I really care about!';
-        default:
-            return 'Unknown step';
-    }
-}
 
 class SignUp extends Component {
     state = {
@@ -61,20 +37,6 @@ class SignUp extends Component {
         password2: "",
         activeStep: 0,
     }
-
-    handleNext = () => {
-        const { activeStep } = this.state;
-        let {  } = this.state;
-        this.setState({
-            activeStep: activeStep + 1
-        });
-    };
-
-    handleBack = () => {
-        this.setState(state => ({
-            activeStep: state.activeStep - 1,
-        }));
-    };
 
     handleInputChange = event => {
         // Getting the value and name of the input which triggered the change
@@ -98,62 +60,16 @@ class SignUp extends Component {
 
     render() {
         const { classes } = this.props
-        const steps = getSteps();
-        const { activeStep } = this.state;
+
 
         return (
             <Grid container spacing={24}>
                 <Grid item xs={12} md={8}>
                     <Paper className={classes.paper}>
-                        <Typography variant="h6">
-                            Sign up
-              </Typography>
+              <Typography component="h1" variant="h6" align="center">
+              Sign up
+          </Typography>
                         <form className={classes.container} onSubmit={this.handleRegisterSubmit}>
-
-                            <div className={classes.steppersRoot}>
-                                <Stepper activeStep={activeStep}>
-                                    {steps.map((label, index) => {
-                                        const props = {};
-                                        const labelProps = {};
-
-                                        return (
-                                            <Step key={label} {...props}>
-                                                <StepLabel {...labelProps}>{label}</StepLabel>
-                                            </Step>
-                                        );
-                                    })}
-                                </Stepper>
-                                <div>
-                                    {activeStep === steps.length ? (
-                                        <div>
-                                            <Typography className={classes.instructions}>
-                                                All steps completed - you&quot;re finished
-              </Typography>
-                                        </div>
-                                    ) : (
-                                            <div>
-                                                <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
-                                                <div>
-                                                    <Button
-                                                        disabled={activeStep === 0}
-                                                        onClick={this.handleBack}
-                                                        className={classes.button}
-                                                    >
-                                                        Back
-                </Button>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={this.handleNext}
-                                                        className={classes.button}
-                                                    >
-                                                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        )}
-                                </div>
-                            </div>
 
                             <TextField
                                 id="firstName"

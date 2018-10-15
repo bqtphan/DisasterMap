@@ -1,6 +1,4 @@
 const router = require("express").Router();
-// const evacuationController = require("../controllers/evacuationController");
-// const homeController = require("../controllers/homeController");
 const {evacuationController, homeController, mapMessagesController, usersController } = require('../controllers');
 
 

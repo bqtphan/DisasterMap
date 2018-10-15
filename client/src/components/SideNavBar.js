@@ -20,14 +20,18 @@ const styles = theme => ({
         width: drawerWidth,
         [theme.breakpoints.up('md')]: {
             position: 'relative',
+            height: '100%'
         },
+    },
+    sidebarWrapper: {
+        height: "calc(100vh - 75px)",
     }
 });
 
 const SideNavBar = ({ classes, theme, onDrawerToggle, mobileOpen, userLogin }) => {
 
     const drawer = (
-        <div>
+        <Fragment>
             <div className={classes.toolbar} />
             <Divider />
             <List>
@@ -89,7 +93,7 @@ const SideNavBar = ({ classes, theme, onDrawerToggle, mobileOpen, userLogin }) =
                     <ListItemText primary="Resources" />
                 </ListItem>
             </List>
-        </div>
+        </Fragment>
     );
 
     return (
@@ -118,7 +122,9 @@ const SideNavBar = ({ classes, theme, onDrawerToggle, mobileOpen, userLogin }) =
                         paper: classes.drawerPaper,
                     }}
                 >
+                <div className={classes.sidebarWrapper}>
                     {drawer}
+                </div>
                 </Drawer>
             </Hidden>
         </Fragment>
