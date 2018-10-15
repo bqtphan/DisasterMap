@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { auth } from './components/firebase';
-
+import API from './utils/API';
 
 // Pages
 import Home from './pages/Home';
@@ -73,28 +73,48 @@ class App extends Component {
 
     handleLoginSubmit = event => {
     // Preventing the default behavior of the Login submit (which is to refresh the page)
-    event.preventDefault();
+        event.preventDefault();
 
-    const { email, password } = this.state
-    if (email && password) {
-        auth.doSignInWithEmailAndPassword(email, password)
-            .then(res => console.log("It works"))
-            .catch(err => console.log(err))
-    }
+        const { email, password } = this.state
 
-    
+        const { history } = this.props;
 
-    // TESTING WITH DUMMY DATA: EMAIL-David PW-code
-    if(this.state.email === "David" && this.state.password === "code") {
-        this.setState({
-            userLogin: true,
-            email: "",
-            password: "",
-            modal: false
-        })
-    }
-    // ==================================
-    
+        // Clear sessionStorage
+        sessionStorage.clear();
+        // Store all content into sessionStorage
+        sessionStorage.setItem("email", email);
+        
+        // if (email && password) {
+            auth.doSignInWithEmailAndPassword(email, password)
+                .then(res => console.log("It works"))
+                .catch(err => console.log(err))
+            
+        // let temp
+        // //Handle Account Status
+        // auth.onAuthStateChanged(user => {
+        //     if (user) {
+        //         API.get.user.byEmail(user.email).then(function (result) {
+        //             console.log(result)
+        //             temp = result;
+        //             localStorage.setItem('id', result.result[0].id);
+        //             localStorage.setItem('uname', result.result[0].uname);
+        //             localStorage.setItem('email', result.result[0].email);
+        //         });
+        //         console.log(auth.currentUser)
+        //         //window.location = '/new_list'; 
+        //         window.user = user;
+        //     }
+        // });
+        
+        // TESTING WITH DUMMY DATA: EMAIL-David PW-code
+        if(this.state.email === "David" && this.state.password === "code") {
+            this.setState({
+                userLogin: true,
+                email: "",
+                password: "",
+                modal: false
+            })
+        }
     };
 
     render() {

@@ -4,9 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid, Typography, TextField, Checkbox, InputAdornment, Button, Stepper, StepContent, Step, StepLabel } from '@material-ui/core';
 import { Lock, Person, Email } from '@material-ui/icons'
 import API from '../utils/API';
-// import { auth } from '../components/firebase';
-import base from '../firebase1';
-import { withRouter } from "react-router";
+import { auth } from '../components/firebase';
+// import { withRouter } from "react-router";
+import { withRouter} from 'react-router-dom'; 
 
 const styles = theme => ({
     paper: {
@@ -56,7 +56,7 @@ class SignUp extends Component {
         name: "",
         // middleName: "",
         // lastName: "",
-        address: "",
+        // address: "",
         // phoneNumber: "",
         email: "",
         password: "",
@@ -92,30 +92,27 @@ class SignUp extends Component {
     handleRegisterSubmit = async event => {
         event.preventDefault();
         const { name, email, password, password2 } = this.state
-        if (name && email && password && password2) {
-            try {
-                const user = await base
-                  .auth()
-                  .createUserWithEmailAndPassword(email, password);
-                  console.log(user)
-                this.props.history.push("/");
-            } catch (error) {
-                alert(error);
-            }
-        };
-    }
 
-    //         auth.doCreateUserWithEmailAndPassword (email, password)
-    //         .then(function (user) {
-    //             console.log(user);
-    //             // API.saveUser({ name, email })
-    //             // .then(result => console.log("It works"))
-    //             // .catch(err => console.log(err))
-    //         }).catch(function (error) {
-    //         console.log(error.message);
-    //         });
-    //     }
-    // }
+        const {
+            history,
+          } = this.props;
+
+        sessionStorage.clear();
+         // Store all content into sessionStorage
+        sessionStorage.setItem("name", name);
+        sessionStorage.setItem("email", email);
+
+        console.log(name,email,password,password2)
+            auth.doCreateUserWithEmailAndPassword (email, password)
+            .then(function (user) {
+                API.saveUser({ name, email })
+                .then(result => console.log(user))
+                .catch(err => console.log(err))
+                history.push("/");  
+            }).catch(function (error) {
+            console.log(error.message);
+            });
+    }
 
     render() {
         const { classes } = this.props
@@ -179,7 +176,7 @@ class SignUp extends Component {
                             <TextField
                                 id="name"
                                 label="Full Name"
-                                name="Name"
+                                name="name"
                                 type="text"
                                 className={classes.textField}
                                 value={this.state.firstName}
@@ -257,7 +254,7 @@ class SignUp extends Component {
                                 autoComplete="current-password"
                             />
 
-                            <Button type="submit" variant="contained" color="primary" className={classes.button}>
+                            <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={(e) => this.handleRegisterSubmit(e,this.state)}>
                                 Set up your Account
 </Button>
                         </form>
@@ -273,4 +270,4 @@ SignUp.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignUp)
+export default withRouter(withStyles(styles)(SignUp))
