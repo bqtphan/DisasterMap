@@ -4,7 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid, Typography, TextField, Checkbox, InputAdornment, Button, Stepper, StepContent, Step, StepLabel } from '@material-ui/core';
 import { Lock, Person, Email } from '@material-ui/icons'
 import API from '../utils/API';
-
+import { auth } from '../components/firebase';
+// import { withRouter } from "react-router";
+import { withRouter} from 'react-router-dom'; 
 
 const styles = theme => ({
     paper: {
@@ -32,49 +34,49 @@ const styles = theme => ({
     },
 });
 
-function getSteps() {
-    return ['Step 1', 'Step 2', 'Step 3'];
-}
+// function getSteps() {
+//     return ['Step 1', 'Step 2', 'Step 3'];
+// }
 
-function getStepContent(step) {
-    switch (step) {
-        case 0:
-            return 'Select campaign settings...';
-        case 1:
-            return 'What is an ad group anyways?';
-        case 2:
-            return 'This is the bit I really care about!';
-        default:
-            return 'Unknown step';
-    }
-}
+// function getStepContent(step) {
+//     switch (step) {
+//         case 0:
+//             return 'Select campaign settings...';
+//         case 1:
+//             return 'What is an ad group anyways?';
+//         case 2:
+//             return 'This is the bit I really care about!';
+//         default:
+//             return 'Unknown step';
+//     }
+// }
 
 class SignUp extends Component {
     state = {
-        firstName: "",
-        middleName: "",
-        lastName: "",
-        address: "",
-        phoneNumber: "",
+        name: "",
+        // middleName: "",
+        // lastName: "",
+        // address: "",
+        // phoneNumber: "",
         email: "",
         password: "",
-        password2: "",
-        activeStep: 0,
+        password2: ""
+        // activeStep: 0,
     }
 
-    handleNext = () => {
-        const { activeStep } = this.state;
-        let {  } = this.state;
-        this.setState({
-            activeStep: activeStep + 1
-        });
-    };
+    // handleNext = () => {
+    //     const { activeStep } = this.state;
+    //     let {  } = this.state;
+    //     this.setState({
+    //         activeStep: activeStep + 1
+    //     });
+    // };
 
-    handleBack = () => {
-        this.setState(state => ({
-            activeStep: state.activeStep - 1,
-        }));
-    };
+    // handleBack = () => {
+    //     this.setState(state => ({
+    //         activeStep: state.activeStep - 1,
+    //     }));
+    // };
 
     handleInputChange = event => {
         // Getting the value and name of the input which triggered the change
@@ -87,19 +89,35 @@ class SignUp extends Component {
     };
 
 
-    handleRegisterSubmit = () => {
-        const { firstName, lastName, email, password, password2 } = this.state
-        if (firstName && lastName && email && password && password2) {
-            API.saveUser({ firstName, lastName, email, password, password2 })
-                .then(result => console.log("It works"))
+    handleRegisterSubmit = async event => {
+        event.preventDefault();
+        const { name, email, password, password2 } = this.state
+
+        const {
+            history,
+          } = this.props;
+
+        sessionStorage.clear();
+         // Store all content into sessionStorage
+        sessionStorage.setItem("name", name);
+        sessionStorage.setItem("email", email);
+
+        console.log(name,email,password,password2)
+            auth.doCreateUserWithEmailAndPassword (email, password)
+            .then(function (user) {
+                API.saveUser({ name, email })
+                .then(result => console.log(user))
                 .catch(err => console.log(err))
-        }
+                history.push("/");  
+            }).catch(function (error) {
+            console.log(error.message);
+            });
     }
 
     render() {
         const { classes } = this.props
-        const steps = getSteps();
-        const { activeStep } = this.state;
+        // const steps = getSteps();
+        // const { activeStep } = this.state;
 
         return (
             <Grid container spacing={24}>
@@ -110,7 +128,7 @@ class SignUp extends Component {
               </Typography>
                         <form className={classes.container} onSubmit={this.handleRegisterSubmit}>
 
-                            <div className={classes.steppersRoot}>
+                            {/* <div className={classes.steppersRoot}>
                                 <Stepper activeStep={activeStep}>
                                     {steps.map((label, index) => {
                                         const props = {};
@@ -153,12 +171,12 @@ class SignUp extends Component {
                                             </div>
                                         )}
                                 </div>
-                            </div>
+                            </div> */}
 
                             <TextField
-                                id="firstName"
-                                label="First Name"
-                                name="firstName"
+                                id="name"
+                                label="Full Name"
+                                name="name"
                                 type="text"
                                 className={classes.textField}
                                 value={this.state.firstName}
@@ -171,7 +189,7 @@ class SignUp extends Component {
                                 autoFocus
                                 fullWidth
                             />
-                            <TextField
+                            {/* <TextField
                                 id="lastName"
                                 label="Last Name"
                                 name="lastName"
@@ -185,7 +203,7 @@ class SignUp extends Component {
                                 }}
                                 required
                                 fullWidth
-                            />
+                            /> */}
                             <TextField
                                 id="email"
                                 label="Email"
@@ -236,7 +254,7 @@ class SignUp extends Component {
                                 autoComplete="current-password"
                             />
 
-                            <Button type="submit" variant="contained" color="primary" className={classes.button}>
+                            <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={(e) => this.handleRegisterSubmit(e,this.state)}>
                                 Set up your Account
 </Button>
                         </form>
@@ -252,4 +270,4 @@ SignUp.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignUp)
+export default withRouter(withStyles(styles)(SignUp))
