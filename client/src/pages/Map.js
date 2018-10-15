@@ -24,10 +24,18 @@ const styles = theme => ({
     position: 'absolute',
     bottom: theme.spacing.unit * 8,
     left: theme.spacing.unit * 4,
+    [theme.breakpoints.up('md')]: {
+      left: theme.spacing.unit * 35
+    },
   },
   margin: {
     margin: theme.spacing.unit,
   },
+  content: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+  },
+  toolbar: theme.mixins.toolbar,
 });
 
 const alertsArr = ['rescue', 'medical', 'crime']
@@ -120,21 +128,21 @@ class Map extends Component {
     });
   };
 
-  
-getPosition = () => {
-  if (navigator.geolocation.getCurrentPosition) {
-    this.setState({
-      location: "-45, 95"
-    })
+
+  getPosition = () => {
+    if (navigator.geolocation.getCurrentPosition) {
+      this.setState({
+        location: "-45, 95"
+      })
+    }
   }
-}
   handleClickOpen = () => {
-    this.setState({ 
+    this.setState({
       modal: true,
       alert: "",
-        situation: "",
-        message: "",
-        activeStep: 0 
+      situation: "",
+      message: "",
+      activeStep: 0
     });
   };
 
@@ -143,29 +151,29 @@ getPosition = () => {
       modal: false,
     });
   };
-  
+
   handleSendAlert = () => {
     const { alert, situation, location, message } = this.state
     console.log(this.state)
     console.log(alert, situation, location, message)
     if (alert && situation && location && message) {
-          API.saveMapMessage({alert, situation, location, message})
-            .then(res => this.loadMapAlerts())
-            .catch(err => console.log(err));
-        }
+      API.saveMapMessage({ alert, situation, location, message })
+        .then(res => this.loadMapAlerts())
+        .catch(err => console.log(err));
+    }
   }
-  
+
   getDialogContent = (step) => {
     switch (step) {
       case 0:
-      return  alertsArr.map((prop, index) => (
+        return alertsArr.map((prop, index) => (
           <Grid item >
             <Button key={index} variant="contained" color="secondary" aria-label={prop} className={this.props.classes.button} onClick={() => this.handleFirstNext(prop)}>
               {prop}
             </Button>
           </Grid>))
       case 1:
-      return situationFun(this.state.alert).map((prop, index) => (
+        return situationFun(this.state.alert).map((prop, index) => (
           <Grid item >
             <Button key={index} variant="contained" color="secondary" aria-label={prop} className={this.props.classes.button} onClick={() => this.handleSecondNext(prop)}>
               {prop}
@@ -174,11 +182,11 @@ getPosition = () => {
       case 2:
         return (<Grid item >
           <TextField
-              fullWidth
+            fullWidth
             id="geolocationInput"
             name="location"
             label="TextField"
-            val ={this.handleInputChange}
+            val={this.handleInputChange}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -188,13 +196,13 @@ getPosition = () => {
             }}
           />
           <TextField
-            id  name="message"
+            id name="message"
             label="Note"
             placeholder="Add Note (Optional)"
             multiline
             rows="4"
             value={this.state.message}
-            onChange={this.handleInputChange} 
+            onChange={this.handleInputChange}
             className={this.props.classes.textField}
             margin="normal"
             variant="filled"
@@ -205,61 +213,63 @@ getPosition = () => {
     }
   }
 
-  
+
 
   render() {
     const { classes, fullScreen } = this.props
 
-    return (<Fragment>
-      <div className={classes.mapArea}>
-        <Tooltip title="Send Alert">
-          <Button variant="fab" color="secondary" className={classes.absolute} onClick={this.handleClickOpen}>
-            <Add />
-          </Button>
-        </Tooltip>
-      </div>
+    return (
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        <div className={classes.mapArea}>
+          <Tooltip title="Send Alert">
+            <Button variant="fab" color="secondary" className={classes.absolute} onClick={this.handleClickOpen}>
+              <Add />
+            </Button>
+          </Tooltip>
+        </div>
 
-      <Dialog
-        fullScreen={fullScreen}
-        open={this.state.modal}
-        onClose={this.handleClose}
-        aria-labelledby="alertModal"
-      >
-        <DialogTitle id="alertModal" align="center">
-          {this.state.alert.toUpperCase() || "NEW ALERT"}
-        </DialogTitle>
-        <DialogContent>
-          <Grid container direction="row" justify="center" alignItems="baseline">
-            {
-              this.getDialogContent(this.state.activeStep)
-            }
-          </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
-            Cancel
+        <Dialog
+          fullScreen={fullScreen}
+          open={this.state.modal}
+          onClose={this.handleClose}
+          aria-labelledby="alertModal"
+        >
+          <DialogTitle id="alertModal" align="center">
+            {this.state.alert.toUpperCase() || "NEW ALERT"}
+          </DialogTitle>
+          <DialogContent>
+            <Grid container direction="row" justify="center" alignItems="baseline">
+              {
+                this.getDialogContent(this.state.activeStep)
+              }
+            </Grid>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
           </Button>
-          <Button
-            disabled={this.state.activeStep === 0}
-            onClick={this.handleBack}
-            className={classes.button}
-          >
-            Back
+            <Button
+              disabled={this.state.activeStep === 0}
+              onClick={this.handleBack}
+              className={classes.button}
+            >
+              Back
           </Button>
             {
               this.state.activeStep === 2 ? (
-              <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={this.handleSendAlert}
-                        className={classes.button}
-                      >
-                        Send
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={this.handleSendAlert}
+                  className={classes.button}
+                >
+                  Send
                       </Button>
-            ) : null }
-        </DialogActions>
-      </Dialog>
-    </Fragment>
+              ) : null}
+          </DialogActions>
+        </Dialog>
+      </main>
     );
   }
 }

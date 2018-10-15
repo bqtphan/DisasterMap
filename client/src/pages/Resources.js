@@ -4,18 +4,26 @@ import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid, Typography } from '@material-ui/core';
 
 const styles = theme => ({
-    paper: {
-      padding: theme.spacing.unit * 2,
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    },
-  });
+  paper: {
+    padding: theme.spacing.unit * 2,
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+  content: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing.unit * 3,
+  },
+  toolbar: theme.mixins.toolbar,
+});
 
 class Resources extends Component {
-    
-    render() {
-        const { classes } = this.props
+
+  render() {
+    const { classes } = this.props
     return (
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <Paper className={classes.paper}>
@@ -24,15 +32,16 @@ class Resources extends Component {
               </Typography>
               <a href="http://google.org/crisismap/weather_and_events">Google Crisis Map</a>
               <p>"...help people find and use critical emergency information when they need it most. Using Google's technology, speed, and user-friendly design, Crisis Map was designed to make disaster information easy to find, use, and share."</p>
-              </Paper>
+            </Paper>
           </Grid>
         </Grid>
-      );
-    }
+      </main>
+    );
+  }
 }
 
 Resources.propTypes = {
-    classes: PropTypes.object.isRequired,
-  };
-  
+  classes: PropTypes.object.isRequired,
+};
+
 export default withStyles(styles, { withTheme: true })(Resources)

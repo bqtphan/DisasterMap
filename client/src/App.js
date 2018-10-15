@@ -74,32 +74,30 @@ class App extends Component {
     };
 
     handleLoginSubmit = event => {
-    // Preventing the default behavior of the Login submit (which is to refresh the page)
+        // Preventing the default behavior of the Login submit (which is to refresh the page)
         event.preventDefault();
-
         const { email, password } = this.state
-
         const { history } = this.props;
 
         // Clear sessionStorage
         sessionStorage.clear();
         // Store all content into sessionStorage
         sessionStorage.setItem("email", email);
-        
+
         // if (email && password) {
-            auth.doSignInWithEmailAndPassword(email, password)
-                .then(res => console.log("It works"))
-                .catch(err => alert(err))
+        auth.doSignInWithEmailAndPassword(email, password)
+            .then(res => console.log("It works"))
+            .catch(err => alert(err))
     };
 
     render() {
         const { classes, theme } = this.props;
 
         return (
-        // <Provider store={store}>
+            // <Provider store={store}>
             <Router>
                 <div className={classes.root}>
-                <CssBaseline />
+                    <CssBaseline />
 
                     <Header
                         onDrawerToggle={this.handleDrawerToggle}
@@ -120,24 +118,24 @@ class App extends Component {
                         userLogin={this.state.userLogin}
                     />
 
-                    <main className={classes.content}>
-                        <div className={classes.toolbar} />
-                        <Switch>
-                            <Route exact path="/" component={Home} />
-                            <Route exact path="/dashboard" component={Dashboard} />
-                            <Route exact path="/map" component={Map} />
-                            <Route exact path="/evacuationlists" component={Evacuationlists} />
-                            <Route exact path="/homelists" component={Homelists} />
-                            <Route exact path="/shelters" component={Shelters} />
-                            <Route exact path="/resources" component={Resources} />
-                            <Route exact path="/announcement" component={Announcement} />
-                            <Route exact path="/signup" component={SignUp} />
-                            <Route component={NoMatch} />
-                        </Switch>
-                    </main>
+                    {/* <main className={classes.content}>
+                        <div className={classes.toolbar} /> */}
+                    <Switch>
+                        <Route exact path="/" component={Home} />
+                        <Route exact path="/dashboard" component={Dashboard} />
+                        <Route exact path="/map" component={Map} />
+                        <Route exact path="/evacuationlists" component={Evacuationlists} />
+                        <Route exact path="/homelists" component={Homelists} />
+                        <Route exact path="/shelters" component={Shelters} />
+                        <Route exact path="/resources" component={Resources} />
+                        <Route exact path="/announcement" component={Announcement} />
+                        <Route exact path="/signup" component={SignUp} />
+                        <Route component={NoMatch} />
+                    </Switch>
+                    {/* </main> */}
                 </div>
             </Router>
-        // </Provider>
+            // </Provider>
         )
     }
 }

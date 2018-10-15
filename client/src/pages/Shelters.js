@@ -20,6 +20,11 @@ const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
   },
+  content: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+},
+toolbar: theme.mixins.toolbar,
 });
 
 class Shelters extends Component {
@@ -58,6 +63,8 @@ class Shelters extends Component {
     const { classes } = this.props
 
     return (
+      <main className={classes.content}>
+      <div className={classes.toolbar} />
       <Grid container spacing={24}>
         <Grid item xs={12} md={8}>
           <Paper className={classes.paper}>
@@ -109,6 +116,7 @@ class Shelters extends Component {
           </Paper>
         </Grid>
       </Grid>
+      </main>
     );
   }
 }

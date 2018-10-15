@@ -27,7 +27,7 @@ const styles = theme => ({
     margin: theme.spacing.unit * 2,
   },
   rightIcon: {
-    marginLeft: theme.spacing.unit *2,
+    marginLeft: theme.spacing.unit * 2,
   },
   formControl: {
     margin: theme.spacing.unit * 3,
@@ -38,14 +38,17 @@ const styles = theme => ({
   containerScroll: {
     overflow: 'auto',
     maxHeight: '100vh',
-    [theme.breakpoints.up('md')]: {
-      margin: theme.spacing.unit * 3,
-    }
   },
   icons: {
     padding: '10px',
     zIndex: '101'
   },
+  content: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing.unit * 3,
+  },
+  toolbar: theme.mixins.toolbar,
 });
 
 class Evacuationlists extends Component {
@@ -63,7 +66,7 @@ class Evacuationlists extends Component {
 
   loadEvacuationlists = () => {
     API.getAllEvacuationLists()
-      .then(res => this.setState({ items: res.data, item: ""}))
+      .then(res => this.setState({ items: res.data, item: "" }))
       .catch(err => console.log(err));
   };
 
@@ -118,111 +121,114 @@ class Evacuationlists extends Component {
     const { classes } = this.props;
 
     return (
-      <Grid container spacing={0} className={classes.containerScroll}>
-        <Grid item xs={12} md={12}>
-          <Grid
-            container
-            spacing={0}
-            justify="center"
-            
-          >
-            <Grid item xs={12} md={10}>
-              <Paper className={classes.paper}>
-                <Typography variant="h6" align="center" color="textPrimary">
-                  Evacuation Kit
-          </Typography>
-                <Typography variant="body1">
-                  An evacuation kit is one that you would take with you in case of an evacuation. Evacuation kit should
-        be easily portable like a backpack or suitcase on wheels. Store it somewhere you can easily
-        get to it.
-          </Typography>
-                <List>
-                  {
-                    this.state.items.length ? 
-                    this.state.items.map((item, index) => (
-                      <ListItem
-                        key={index}
-                        dense
-                        className={classes.listItem}
-                      >
-                        <ListItemText primary={item.item} className={item.checked && classes.slashedText}/>
-                        <Checkbox
-                          className={classes.icons}
-                          checked={item.checked}
-                          tabIndex={-1}
-                          disableRipple
-                          onChange={(event) => this.handleCheckChange(event, item._id)}
-                        />
-                        {
-                          !item.checked ? (<ListItemSecondaryAction >
-                          <IconButton aria-label="Edit"title="Edit" >
-                            <Edit onClick={() => this.handleOpenModal(item._id)} />
-                          </IconButton>
-                          <IconButton aria-label="Delete" title="Delete" >
-                            <Delete onClick={() => this.deleteEvacuationlists(item._id)} />
-                          </IconButton>
-                        </ListItemSecondaryAction>) 
-                        : null
-                        }
-                        
-                      </ListItem>
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        <Grid container spacing={0} className={classes.containerScroll}>
+          <Grid item xs={12} md={12}>
+            <Grid
+              container
+              spacing={0}
+              justify="center"
 
-                    )) : <Typography variant="h6" align="center">
-                    You don't have an evacuation kit yet! Start creating one! 
+            >
+              <Grid item xs={12} md={10}>
+                <Paper className={classes.paper}>
+                  <Typography variant="h6" align="center" color="textPrimary">
+                    Evacuation Kit
+          </Typography>
+                  <Typography variant="body1">
+                    An evacuation kit is one that you would take with you in case of an evacuation. Evacuation kit should
+          be easily portable like a backpack or suitcase on wheels. Store it somewhere you can easily
+          get to it.
+          </Typography>
+                  <List>
+                    {
+                      this.state.items.length ?
+                        this.state.items.map((item, index) => (
+                          <ListItem
+                            key={index}
+                            dense
+                            className={classes.listItem}
+                          >
+                            <ListItemText primary={item.item} className={item.checked && classes.slashedText} />
+                            <Checkbox
+                              className={classes.icons}
+                              checked={item.checked}
+                              tabIndex={-1}
+                              disableRipple
+                              onChange={(event) => this.handleCheckChange(event, item._id)}
+                            />
+                            {
+                              !item.checked ? (<ListItemSecondaryAction >
+                                <IconButton aria-label="Edit" title="Edit" >
+                                  <Edit onClick={() => this.handleOpenModal(item._id)} />
+                                </IconButton>
+                                <IconButton aria-label="Delete" title="Delete" >
+                                  <Delete onClick={() => this.deleteEvacuationlists(item._id)} />
+                                </IconButton>
+                              </ListItemSecondaryAction>)
+                                : null
+                            }
+
+                          </ListItem>
+
+                        )) : <Typography variant="h6" align="center">
+                          You don't have an evacuation kit yet! Start creating one!
             </Typography>
-                  }
-                </List>
-                <form>
-                  <TextField
-                    id="item"
-                    type="text"
-                    name="item"
-                    label="Item"
-                    className={classes.textField}
-                    margin="normal"
-                    required
-                    autoFocus
-                    value={this.state.item}
-                    onChange={this.handleInputChange}
-                    helperText="List any other additional items that your family might need"
-                  />
-                  <Button size="medium" type="submit" variant="contained" color="primary" className={classes.button} onClick={this.handleFormSubmit}>
-                    SUBMIT
+                    }
+                  </List>
+                  <form>
+                    <TextField
+                      id="item"
+                      type="text"
+                      name="item"
+                      label="Item"
+                      className={classes.textField}
+                      margin="normal"
+                      required
+                      autoFocus
+                      value={this.state.item}
+                      onChange={this.handleInputChange}
+                      helperText="List any other additional items that your family might need"
+                    />
+                    <Button size="medium" type="submit" variant="contained" color="primary" className={classes.button} onClick={this.handleFormSubmit}>
+                      SUBMIT
                   </Button>
-                </form>
-                {
-                  this.state.modal ? (
-                  <SimpleModal
-                    ariaLabel="Edit"
-                    ariaDescription="Edit current item"
-                    open={this.state.modal}
-                    onClose={this.handleCloseModal}
-                  >
-                    <Typography variant="h6">
-                      Edit
+                  </form>
+                  {
+                    this.state.modal ? (
+                      <SimpleModal
+                        ariaLabel="Edit"
+                        ariaDescription="Edit current item"
+                        open={this.state.modal}
+                        onClose={this.handleCloseModal}
+                      >
+                        <Typography variant="h6">
+                          Edit
                     </Typography>
-                    <form className={classes.formContainer}>
-                      <TextField
-                        id="editItem"
-                        label="Item"
-                        name="editItem"
-                        type="text"
-                        className={classes.textField}
-                        value={this.state.editItem}
-                        onChange={this.handleInputChange}
-                        margin="normal"
-                      />
-                      <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={this.updateItem}>
-                        Save
+                        <form className={classes.formContainer}>
+                          <TextField
+                            id="editItem"
+                            label="Item"
+                            name="editItem"
+                            type="text"
+                            className={classes.textField}
+                            value={this.state.editItem}
+                            onChange={this.handleInputChange}
+                            margin="normal"
+                          />
+                          <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={this.updateItem}>
+                            Save
                       </Button>
-                    </form>
-                  </SimpleModal>) : null
-                }
-              </Paper>
+                        </form>
+                      </SimpleModal>) : null
+                  }
+                </Paper>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </main>
     );
   }
 }
@@ -233,7 +239,7 @@ Evacuationlists.propTypes = {
 
 // const mapStateToProps = (state) => {
 //   return {
-    
+
 //   }
 // } 
 // const mapDispatchToProps = (dispatch) => {
