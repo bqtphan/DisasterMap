@@ -8,6 +8,7 @@ import { CssBaseline } from '@material-ui/core';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import { auth } from './components/firebase';
 
 // Pages
 import Home from './pages/Home';
@@ -73,29 +74,28 @@ class App extends Component {
     };
 
     handleLoginSubmit = event => {
-        // Preventing the default behavior of the Login submit (which is to refresh the page)
+    // Preventing the default behavior of the Login submit (which is to refresh the page)
         event.preventDefault();
 
-        // ==================================
-        // FIREBASE AUTHENTICATION GOES HERE 
+        const { email, password } = this.state
 
-        // TESTING WITH DUMMY DATA: EMAIL-David PW-code
-        if (this.state.email === "David" && this.state.password === "code") {
-            this.setState({
-                userLogin: true,
-                email: "",
-                password: "",
-                modal: false
-            })
-        }
-        // ==================================
+        const { history } = this.props;
 
+        // Clear sessionStorage
+        sessionStorage.clear();
+        // Store all content into sessionStorage
+        sessionStorage.setItem("email", email);
+        
+        // if (email && password) {
+            auth.doSignInWithEmailAndPassword(email, password)
+                .then(res => console.log("It works"))
+                .catch(err => alert(err))
     };
 
     render() {
         const { classes, theme } = this.props;
 
-        return 
+        return (
         // <Provider store={store}>
             <Router>
                 <div className={classes.root}>
@@ -138,6 +138,7 @@ class App extends Component {
                 </div>
             </Router>
         // </Provider>
+        )
     }
 }
 

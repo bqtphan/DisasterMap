@@ -22,12 +22,19 @@ if (process.env.NODE_ENV === "production") {
 app.use(routes);
 
 
-
+// Set up promises with mongoose
+mongoose.Promise = global.Promise;
 // Connect to the Mongo DB
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/emergency_kit");
+var MONGODB_URI =  process.env.MONGODB_URI || "mongodb://localhost/emergency_kit";
+mongoose.connect(MONGODB_URI);
+const db = mongoose.connection;
 
 mongoose.connection.on('connected', function() {
   console.log("connection established successfully");
+  console.log("Running Seeds.....");
+  require('./seeds/index.js')();	
+
+  
 });
 
 mongoose.connection.on('error', function(err) {

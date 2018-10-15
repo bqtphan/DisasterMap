@@ -1,17 +1,11 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Grid, Typography, InputAdornment, TextField, Button, Tooltip, GridList, GridListTile, GridListTileBar, ListSubheader, Dialog, DialogActions, DialogContentText, DialogTitle, DialogContent, withMobileDialog, AppBar, Toolbar, IconButton } from '@material-ui/core';
-import { Add, Close, LocationOn } from '@material-ui/icons'
+import { Grid, InputAdornment, TextField, Button, Tooltip, Dialog, DialogActions, DialogTitle, DialogContent, withMobileDialog } from '@material-ui/core';
+import { Add, LocationOn } from '@material-ui/icons'
 import API from '../utils/API';
 
 const styles = theme => ({
-  paper: {
-    padding: theme.spacing.unit * 2,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    height: "100%"
-  },
   container: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -29,19 +23,14 @@ const styles = theme => ({
   absolute: {
     position: 'absolute',
     bottom: theme.spacing.unit * 8,
-    right: theme.spacing.unit * 4,
+    left: theme.spacing.unit * 4,
   },
   margin: {
     margin: theme.spacing.unit,
   },
 });
 
-
 const alertsArr = ['rescue', 'medical', 'crime']
-
-// const rescue = ['trapped', 'other']
-// const medical = ['trouble breathing', 'bleeding', 'pain', 'other']
-// const crime = ['crime', 'suspicous behavior', 'other']
 
 const situationArr = {
   rescue: ['trapped', 'other'],
@@ -65,53 +54,35 @@ function situationFun(alert) {
 class Map extends Component {
   state = {
     userAlerts: [],
-    alerts: alertsArr,
     alert: "",
-    situations: [],
     situation: "",
-    address: "",
-    geolocation: {},
-    note: "",
+    location: "",
+    message: "",
     modal: false,
     activeStep: 0
   }
 
   componentDidMount() {
-    if (!this.state.geolocation.length) {
-      //get geolocation
-      this.setState({
-        location: "-45, 95"
-      })
+    if (!this.state.location) {
+      //get location
+      this.getPosition()
     }
-    // this.loadMapAlerts();
+    this.loadMapAlerts();
   }
-
-  // situationArr[= (al]rt) => {
-  //   switch (alert) {
-  //     case "rescue":
-  //       return ['trapped', 'other'];
-  //     case "medical":
-  //       return ['trouble breathing', 'bleeding', 'pain', 'other'];
-  //     case "crime":
-  //       return ['crime', 'suspicous behavior', 'other'];
-  //     default:
-  //       return console.log("Couldn't find alert");
-  //   }
-  // }
 
   loadMapAlerts = () => {
     API.getMapMessages()
       .then(res => this.setState({
-        alerts: res.data,
-        modal: false,
+        userAlerts: res.data,
         alert: "",
         situation: "",
-        address: "",
-        note: "",
+        message: "",
+        modal: false,
         activeStep: 0
       }))
       .catch(err => console.log(err));
   };
+
 
   deleteMapMessage = id => {
     API.deleteMapMessage(id)
@@ -119,20 +90,10 @@ class Map extends Component {
       .catch(err => console.log(err));
   };
 
-  // handleNext = () => {
-  //   this.setState(prevState => ({
-  //     activeStep: prevState.activeStep + 1,
-  //   }));
-  // };
-
-
   handleFirstNext = (alert) => {
-    const situations = situationArr[alert];
-    console.log(situations)
     this.setState(prevState => ({
       activeStep: prevState.activeStep + 1,
       alert: alert,
-      situations: situations
     }));
   };
 
@@ -142,8 +103,6 @@ class Map extends Component {
       situation: situation,
     }));
   }
-
-
 
   handleBack = () => {
     this.setState(prevState => ({
@@ -164,27 +123,17 @@ class Map extends Component {
   
 getPosition = () => {
   if (navigator.geolocation.getCurrentPosition) {
-    this.setState({ lat: 0, lng: 0 })
+    this.setState({
+      location: "-45, 95"
+    })
   }
-  // in form, if no geolocation, will set to address, if no address, set to null
 }
-
-  // handleMessageSubmit = () => {
-  //   if (this.state.note && this.state.location) {
-  //     API.saveMapMessage({ note: this.state.note, location: this.state.location })
-  //       .then(res => this.loadMapAlerts())
-  //       .catch(err => console.log(err));
-  //   }
-  // }
-
   handleClickOpen = () => {
     this.setState({ 
       modal: true,
       alert: "",
-      situations: [],
         situation: "",
-        address: "",
-        note: "",
+        message: "",
         activeStep: 0 
     });
   };
@@ -194,21 +143,29 @@ getPosition = () => {
       modal: false,
     });
   };
-
-  handleSend = () => console.log(this.state)
   
-
+  handleSendAlert = () => {
+    const { alert, situation, location, message } = this.state
+    console.log(this.state)
+    console.log(alert, situation, location, message)
+    if (alert && situation && location && message) {
+          API.saveMapMessage({alert, situation, location, message})
+            .then(res => this.loadMapAlerts())
+            .catch(err => console.log(err));
+        }
+  }
+  
   getDialogContent = (step) => {
     switch (step) {
       case 0:
-      return  this.state.alerts.map((prop, index) => (
+      return  alertsArr.map((prop, index) => (
           <Grid item >
             <Button key={index} variant="contained" color="secondary" aria-label={prop} className={this.props.classes.button} onClick={() => this.handleFirstNext(prop)}>
               {prop}
             </Button>
           </Grid>))
       case 1:
-      return this.state.situations.map((prop, index) => (
+      return situationFun(this.state.alert).map((prop, index) => (
           <Grid item >
             <Button key={index} variant="contained" color="secondary" aria-label={prop} className={this.props.classes.button} onClick={() => this.handleSecondNext(prop)}>
               {prop}
@@ -217,13 +174,11 @@ getPosition = () => {
       case 2:
         return (<Grid item >
           <TextField
-            className={this.props.classes.margin}
-            fullWidth
+              fullWidth
             id="geolocationInput"
-            name="geolocation"
+            name="location"
             label="TextField"
-            value={this.state.geolocation}
-            onChange={this.handleInputChange}
+            val ={this.handleInputChange}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -233,15 +188,12 @@ getPosition = () => {
             }}
           />
           <TextField
-            id="noteInput"
-            fullWidth
-            name="note"
+            id  name="message"
             label="Note"
             placeholder="Add Note (Optional)"
             multiline
             rows="4"
-            // defaultValue="Default Value"
-            value={this.state.note}
+            value={this.state.message}
             onChange={this.handleInputChange} 
             className={this.props.classes.textField}
             margin="normal"
@@ -278,45 +230,33 @@ getPosition = () => {
         </DialogTitle>
         <DialogContent>
           <Grid container direction="row" justify="center" alignItems="baseline">
-
             {
               this.getDialogContent(this.state.activeStep)
             }
-            
           </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={this.handleClose} color="primary">
             Cancel
           </Button>
-
           <Button
             disabled={this.state.activeStep === 0}
             onClick={this.handleBack}
             className={classes.button}
           >
             Back
-                </Button>
-
-{this.state.activeStep === 2 ? (
-  <Button
-            variant="contained"
-            color="primary"
-            onClick={this.handleSend}
-            className={classes.button}
-          >
-             Send
           </Button>
-) : null }
-
-          {/* <Button
-            variant="contained"
-            color="primary"
-            onClick={this.state.activeStep === 2 ? this.handleSend : this.handleNext}
-            className={classes.button}
-          >
-            {this.state.activeStep === 2 ? 'Send' : 'Next'}
-          </Button> */}
+            {
+              this.state.activeStep === 2 ? (
+              <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={this.handleSendAlert}
+                        className={classes.button}
+                      >
+                        Send
+                      </Button>
+            ) : null }
         </DialogActions>
       </Dialog>
     </Fragment>

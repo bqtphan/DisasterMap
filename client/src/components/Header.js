@@ -5,6 +5,8 @@ import { AppBar, Toolbar, Typography, IconButton, Button, TextField, InputAdornm
 import { Menu, PermIdentity, Lock, AccountCircle } from '@material-ui/icons';
 import LoginModal from './SimpleModal';
 import { Redirect } from 'react-router-dom';
+import { auth } from '../components/firebase';
+
 
 const drawerWidth = 240;
 
@@ -125,9 +127,9 @@ const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, mod
                                 label="Remember me"
                             />
 
-                            <Button type="submit" variant="contained" color="primary" className={classes.button} fullWidth>
+                            <Button type="submit" variant="contained" color="primary" className={classes.button} fullWidth onClick={ onCloseModal }>
                                 Log in
-      </Button>
+                            </Button>
                         </form>
                     </LoginModal>
                 </Toolbar>

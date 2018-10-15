@@ -32,5 +32,14 @@ module.exports = {
       .then(dbModel => dbModel.remove())
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
-  }
+  },
+  seed: function(seeds) { 
+    return db.Evacuation 
+      .remove({})
+      .then (() => db.Evacuation.insertMany (seeds))
+      .then (dbModel => dbModel)
+      .catch(err => console.log(error));
+
+
+  } 
 };
