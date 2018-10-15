@@ -126,7 +126,7 @@ const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, mod
                                 label="Remember me"
                             />
 
-                            <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={ onCloseModal }>
+                            <Button type="submit" variant="contained" color="primary" className={classes.button} onClick={(e) => this.handleLoginSubmit(e,this.state)}>>
                                 Log in
                             </Button>
                         </form>
