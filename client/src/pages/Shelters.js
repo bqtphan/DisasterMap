@@ -4,11 +4,12 @@ import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid, Typography, List, ListItem, ListItemSecondaryAction, ListItemText, Checkbox, IconButton } from '@material-ui/core';
 import { Comment } from '@material-ui/icons'
 import API from '../utils/API';
+import ShelterMap from '../components/ShelterMap';
 
 
 const styles = theme => ({
   paper: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 1,
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
@@ -27,12 +28,23 @@ const styles = theme => ({
 toolbar: theme.mixins.toolbar,
 });
 
+let curLat = 0;
+let curLng = 0;
+
 class Shelters extends Component {
   state = {
-    shelters: [],
+    results: {},
     checked: [0],
+    curLat: -33.8670522,
+    curLng: 151.1957362,
+    filter: ''
   }
 
+  getShelters = (lat, lng, filter) => {
+    API.getShelters(lat, lng, filter)
+      .then(res => this.setState({ results: res.data }))
+      .catch(err => console.log(err));
+  };
 
   handleToggle = value => () => {
     const { checked } = this.state;
@@ -45,13 +57,23 @@ class Shelters extends Component {
       newChecked.splice(currentIndex, 1);
     }
 
+    if (this.state.checked.indexOf(value) == true) {
+      this.setState({
+        filter: this.state.checked.indexOf(value).key
+      }, function () {
+        console.log(this.state.filter);
+    });
+    }
+
     this.setState({
       checked: newChecked,
     });
+
+    this.getShelters(this.state.curLat, this.state.curLng, this.state.filter);
   };
 
   componentDidMount() { 
-    // this.loadShelters();
+    this.getShelters(this.state.curLat, this.state.curLng, this.state.filter);
   }
 
   loadShelters = () => {
@@ -65,16 +87,17 @@ class Shelters extends Component {
     return (
       <main className={classes.content}>
       <div className={classes.toolbar} />
-      <Grid container spacing={24}>
+      <Grid container spacing={23.5}>
         <Grid item xs={12} md={8}>
           <Paper className={classes.paper}>
 
-          
-            <Typography variant="h6">
-              Map
-              </Typography>
 
-            Still under construction! Please be patient with us!
+              <ShelterMap
+              shelters={this.state.results}
+              containerElement={<div style={{ height: `400px` }} />}
+              mapElement={<div style={{ height: `100%` }} />}
+              loadingElement={<div style={{ height: `100%` }} />}
+              />
               
               </Paper>
         </Grid>
@@ -89,7 +112,7 @@ class Shelters extends Component {
               </Typography>
 
             <List>
-          {[0, 1, 2, 3].map(value => (
+          {["Hospitals" , "Church", "Schools"].map(value => (
             <ListItem
               key={value}
               role={undefined}
@@ -103,7 +126,7 @@ class Shelters extends Component {
                 tabIndex={-1}
                 disableRipple
               />
-              <ListItemText primary={`Line item ${value + 1}`} />
+              <ListItemText primary={`${value}`} />
               <ListItemSecondaryAction>
                 <IconButton aria-label="Comments">
                   <Comment />
