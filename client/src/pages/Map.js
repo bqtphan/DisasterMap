@@ -213,7 +213,7 @@ class Map extends Component {
           </Grid>))
       case 2:
         return (<Grid item >
-          <TextField
+          {/* <TextField
             fullWidth
             id="geolocationInput"
             name="location"
@@ -226,11 +226,12 @@ class Map extends Component {
                 </InputAdornment>
               ),
             }}
-          />
+          /> */}
           <TextField
             id name="message"
             label="Note"
             placeholder="Add Note (Optional)"
+            fullWidth
             multiline
             rows="4"
             value={this.state.message}

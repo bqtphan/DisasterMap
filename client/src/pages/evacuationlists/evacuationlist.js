@@ -12,7 +12,7 @@ const styles = theme => ({
     padding: theme.spacing.unit * 2,
     textAlign: 'center',
     color: theme.palette.text.secondary,
-    minHeight: '100vh'
+    // minHeight: '100vh'
   },
   formContainer: {
     display: 'flex',
@@ -36,8 +36,8 @@ const styles = theme => ({
     textDecoration: "line-through"
   },
   containerScroll: {
-    overflow: 'auto',
-    maxHeight: '100vh',
+    // overflow: 'auto',
+    // maxHeight: '100vh',
   },
   icons: {
     padding: '10px',
@@ -47,6 +47,8 @@ const styles = theme => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3,
+    height: '100%',
+    overflow: 'auto',
   },
   toolbar: theme.mixins.toolbar,
 });
