@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import API from "../../utils/API";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Grid, Typography, TextField, Button, Checkbox, List, ListItemText, ListItemSecondaryAction, ListItem, IconButton } from '@material-ui/core';
+import { Paper, Grid, Typography, TextField, Button, Checkbox, List, ListItemText, ListItem, IconButton } from '@material-ui/core';
 import { Delete, Edit } from '@material-ui/icons';
 import SimpleModal from '../../components/SimpleModal';
 
@@ -138,7 +138,6 @@ class Homelists extends Component {
                   <Typography variant="body1">
                     Keep a Stay-at-Home Kit for when you need to shelter at home for an extended period.
           </Typography>
-
                   <List>
                     {
                       this.state.items.length ?
@@ -148,27 +147,29 @@ class Homelists extends Component {
                             dense
                             className={classes.listItem}
                           >
-                            <ListItemText primary={item.item} className={item.checked && classes.slashedText} />
-                            <Checkbox
-                              className={classes.icons}
-                              checked={item.checked}
-                              tabIndex={-1}
-                              // disabled={item.checked}
-                              disableRipple
-                              onChange={(event) => this.handleCheckChange(event, item._id)}
-                            />
-                            {
-                              // !item.checked ? 
-                              (<ListItemSecondaryAction >
-                                <IconButton aria-label="Edit" title="Edit">
-                                  <Edit onClick={() => this.handleOpenModal(item._id)} />
-                                </IconButton>
-                                <IconButton aria-label="Delete" title="Delete">
-                                  <Delete onClick={() => this.deleteHomelists(item._id)} />
-                                </IconButton>
-                              </ListItemSecondaryAction>)
-                              // : null
-                            }
+                            <Grid item xs={1} sm={1} md={1} style={{ maxWidth: 'none' }}>
+                              <Checkbox
+                                // className={classes.icons}
+                                checked={item.checked}
+                                tabIndex={-1}
+                                // disabled={item.checked}
+                                disableRipple
+                                onChange={(event) => this.handleCheckChange(event, item._id)}
+                              />
+                            </Grid>
+                            <Grid item xs={9} sm={9} md={9}>
+                              <ListItemText primary={item.item} className={item.checked && classes.slashedText} />
+                            </Grid>
+                            <Grid item xs={1} sm={1} md={1}>
+                              <IconButton aria-label="Edit" title="Edit">
+                                <Edit onClick={() => this.handleOpenModal(item._id)} />
+                              </IconButton>
+                            </Grid>
+                            <Grid item xs={1} sm={1} md={1}>
+                              <IconButton aria-label="Delete" title="Delete">
+                                <Delete onClick={() => this.deleteHomelists(item._id)} />
+                              </IconButton>
+                            </Grid>
                           </ListItem>
                         )) : <Typography variant="h6" align="center">
                           You don't have an home kit yet! Start creating one!

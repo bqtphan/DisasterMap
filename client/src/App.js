@@ -21,6 +21,7 @@ import Resources from './pages/Resources';
 import Shelters from './pages/Shelters';
 import Announcement from './pages/Announcement';
 import SignUp from './pages/SignUp';
+import Household from './pages/Household';
 
 // const store = configureStore();
 
@@ -129,6 +130,7 @@ class App extends Component {
                         <Route exact path="/shelters" component={Shelters} />
                         <Route exact path="/resources" component={Resources} />
                         <Route exact path="/announcement" component={Announcement} />
+                        <Route exact path="/household" component={Household} />
                         <Route exact path="/signup" component={SignUp} />
                         <Route component={NoMatch} />
                     </Switch>

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, InputAdornment, TextField, Button, Tooltip, Dialog, DialogActions, DialogTitle, DialogContent, withMobileDialog } from '@material-ui/core';
@@ -38,13 +38,7 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 });
 
-const alertsArr = ['rescue', 'medical', 'crime']
-
-const situationArr = {
-  rescue: ['trapped', 'other'],
-  medical: ['trouble breathing', 'bleeding', 'pain', 'other'],
-  crime: ['crime', 'suspicous behavior', 'other']
-}
+const alertsArr = ['rescue', 'medical', 'crime'];
 
 function situationFun(alert) {
   switch (alert) {
@@ -57,7 +51,7 @@ function situationFun(alert) {
     default:
       return console.log("Couldn't find alert");
   }
-}
+};
 
 class Map extends Component {
   state = {

@@ -83,6 +83,12 @@ const SideNavBar = ({ classes, theme, onDrawerToggle, mobileOpen, userLogin }) =
                     </ListItemIcon>
                     <ListItemText primary="Map" />
                 </ListItem>
+                <ListItem button component={Link} to="/household">
+                    <ListItemIcon>
+                        <Map />
+                    </ListItemIcon>
+                    <ListItemText primary="Create household" />
+                </ListItem>
             </List>
             <Divider />
             <List>
