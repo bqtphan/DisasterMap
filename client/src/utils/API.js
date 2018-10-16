@@ -1,5 +1,8 @@
 import axios from "axios";
 
+const googleApiKey = " &key=AIzaSyC5ApuYk2-uT8q3_l9WQn9ENdNFANtc3eg"
+
+
 export default {
   // Gets all items
   getAllHomelists: function() {
@@ -63,5 +66,8 @@ export default {
   deleteUser: (id) => {
     return axios.delete("/api/users/" + id);
   },
+  getShelters: function(lat, lng, filter) {
+    return axios.get("https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&rankby=distance&type=" + filter + googleApiKey);
+  }
 };
 

@@ -7,7 +7,7 @@ const mapMessageSchema = new Schema({
         required: true
     },
     location: {
-        type: String,
+        type: Object,
         required: true
     },
     alert: {
