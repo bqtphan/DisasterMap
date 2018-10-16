@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Paper, Grid, Typography, TextField, Checkbox, InputAdornment, Button, Stepper, StepContent, Step, StepLabel } from '@material-ui/core';
+import { Paper, Grid, Typography, TextField, InputAdornment, Button } from '@material-ui/core';
 import { Lock, Person, Email } from '@material-ui/icons'
 import API from '../utils/API';
 import { auth } from '../components/firebase';

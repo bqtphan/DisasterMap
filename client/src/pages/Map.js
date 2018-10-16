@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, InputAdornment, TextField, Button, Tooltip, Dialog, DialogActions, DialogTitle, DialogContent, withMobileDialog } from '@material-ui/core';
@@ -39,13 +39,7 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 });
 
-const alertsArr = ['rescue', 'medical', 'crime']
-
-const situationArr = {
-  rescue: ['trapped', 'other'],
-  medical: ['trouble breathing', 'bleeding', 'pain', 'other'],
-  crime: ['crime', 'suspicous behavior', 'other']
-}
+const alertsArr = ['rescue', 'medical', 'crime'];
 
 function situationFun(alert) {
   switch (alert) {
@@ -58,7 +52,7 @@ function situationFun(alert) {
     default:
       return console.log("Couldn't find alert");
   }
-}
+};
 
 const options = () => ({
   enableHighAccuracy: true,
@@ -219,7 +213,7 @@ class Map extends Component {
           </Grid>))
       case 2:
         return (<Grid item >
-          <TextField
+          {/* <TextField
             fullWidth
             id="geolocationInput"
             name="location"
@@ -232,11 +226,12 @@ class Map extends Component {
                 </InputAdornment>
               ),
             }}
-          />
+          /> */}
           <TextField
             id name="message"
             label="Note"
             placeholder="Add Note (Optional)"
+            fullWidth
             multiline
             rows="4"
             value={this.state.message}
