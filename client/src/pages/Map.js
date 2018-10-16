@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, InputAdornment, TextField, Button, Tooltip, Dialog, DialogActions, DialogTitle, DialogContent, withMobileDialog } from '@material-ui/core';
 import { Add, LocationOn } from '@material-ui/icons'
 import API from '../utils/API';
+import DisasterMap from '../components/DisasterMap';
 
 const styles = theme => ({
   container: {
@@ -59,24 +60,46 @@ function situationFun(alert) {
   }
 }
 
+const options = () => ({
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+});
+
+let inputLocation = null
+
+const success = (pos) => {
+  const crd = pos.coords;
+  console.log('Your current position is:');
+  console.log(`Latitude : ${crd.latitude}`);
+  console.log(`Longitude: ${crd.longitude}`);
+  console.log(`More or less ${crd.accuracy} meters.`);
+  inputLocation = {lat: crd.latitude, lng: crd.longitude}
+}
+
+const error = (err) => {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+
 class Map extends Component {
   state = {
     userAlerts: [],
     alert: "",
     situation: "",
-    location: "",
+    location: null,
     message: "",
     modal: false,
-    activeStep: 0
+    activeStep: 0,
+    markers: null
   }
 
   componentDidMount() {
-    if (!this.state.location) {
-      //get location
-      this.getPosition()
-    }
+    this.positionPromise()
     this.loadMapAlerts();
   }
+
+  
+  
 
   loadMapAlerts = () => {
     API.getMapMessages()
@@ -89,6 +112,8 @@ class Map extends Component {
         activeStep: 0
       }))
       .catch(err => console.log(err));
+      this.setState ({
+      })
   };
 
 
@@ -130,12 +155,20 @@ class Map extends Component {
 
 
   getPosition = () => {
-    if (navigator.geolocation.getCurrentPosition) {
+    if (inputLocation) {
       this.setState({
-        location: "-45, 95"
+        location: inputLocation
       })
     }
   }
+
+  positionPromise = () => {
+    navigator.geolocation.getCurrentPosition(success, error, options);
+    setTimeout(() => {
+      this.getPosition()
+    }, 7500);
+  }
+
   handleClickOpen = () => {
     this.setState({
       modal: true,
@@ -157,7 +190,12 @@ class Map extends Component {
     console.log(this.state)
     console.log(alert, situation, location, message)
     if (alert && situation && location && message) {
-      API.saveMapMessage({ alert, situation, location, message })
+      API.saveMapMessage({
+        alert: this.state.alert, 
+        situation:this.state.situation, 
+        location:this.state.location, 
+        message:this.state.message
+       })
         .then(res => this.loadMapAlerts())
         .catch(err => console.log(err));
     }
@@ -222,11 +260,21 @@ class Map extends Component {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <div className={classes.mapArea}>
+
+          <DisasterMap
+              containerElement={<div style={{ height: `100%` }} />}
+              mapElement={<div style={{ height: `100%` }} />}
+              loadingElement={<div style={{ height: `100%` }} />}
+              currentLoc= {this.state.location}
+              markers= {this.state.userAlerts}
+          />
+
           <Tooltip title="Send Alert">
             <Button variant="fab" color="secondary" className={classes.absolute} onClick={this.handleClickOpen}>
               <Add />
             </Button>
           </Tooltip>
+
         </div>
 
         <Dialog

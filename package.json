@@ -31,6 +31,7 @@
     "mongoose": "^5.0.17",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "react-google-maps": "^9.4.5"
   }
 }
