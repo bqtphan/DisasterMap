@@ -11,7 +11,9 @@
 
 
 ### Goals/Objectives:
-* Z
+* Pre-disaster checklist
+* Google Maps API
+* User marker ability
 
   
 ### Requirements
@@ -34,7 +36,7 @@ Create a migration strategy | Share data across team members | Schema/seed.sql f
  
 ### Key Personnel
 
-Name | Role(s)
------|--------
-Andrew Duong | 
-David Tran | 
+Brian Phan
+Andrew Duong
+David Tran
+Melinh Mai
