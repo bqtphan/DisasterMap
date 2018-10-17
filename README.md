@@ -1,8 +1,8 @@
 # Project-3
 
-* Project Manager: Brian Phan
-* Git Master: --
-* Deployed Project: 
+* Project Manager: David Tran
+* Git Master: Brian Phan
+* Deployed Project: https://natural-disaster.herokuapp.com/
 * GitHub repository: https://github.com/bqtphan/DisasterMap
 
 # PROJECT PROPOSAL : DisasterMap
