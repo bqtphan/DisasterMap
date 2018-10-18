@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const {evacuationController, homeController, mapMessagesController, usersController } = require('../controllers');
+const {evacuationController, homeController, mapMessagesController, usersController, householdsController } = require('../controllers');
 
 
 // Matches with "/evacuations"
@@ -51,6 +51,17 @@ router
   .get(usersController.findById)
   .put(usersController.update)
   .delete(usersController.remove);
+
+router
+  .route("/households")
+  .get(householdsController.findAll)
+  .post(householdsController.create);
+
+router
+  .route("/households/:id")
+  .get(householdsController.findById)
+  .put(householdsController.update)
+  .delete(householdsController.remove);
 
 
 

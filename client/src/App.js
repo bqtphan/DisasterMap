@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 // import { Provider } from 'react-redux';
 // import configureStore from './store/configureStore';
+// import { createBrowserHistory } from "history";
 
 import Header from "./components/Header";
 import SideNavBar from "./components/SideNavBar";
@@ -22,8 +23,10 @@ import Shelters from './pages/Shelters';
 import Announcement from './pages/Announcement';
 import SignUp from './pages/SignUp';
 import Household from './pages/Household';
+import API from './utils/API';
 
 // const store = configureStore();
+// const hist = createBrowserHistory();
 
 const styles = theme => ({
     root: {
@@ -35,22 +38,26 @@ const styles = theme => ({
         display: 'flex',
         width: '100%',
     },
-    content: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.default,
-        // padding: theme.spacing.unit * 3,
-    },
-    toolbar: theme.mixins.toolbar,
 })
 
 class App extends Component {
     state = {
+        user: "",
         mobileOpen: false,
         modal: false,
         email: "",
         password: "",
-        userLogin: false
+        anchorEl: null,
     };
+
+    componentDidMount() {
+        if (!this.state.user._id) {
+            const userId = sessionStorage.getItem('id');
+            API.getUser(userId)
+            .then(res => this.setState({ user: res.data}))
+            .catch(err => console.log(err));
+        }
+    }
 
     handleDrawerToggle = () => {
         this.setState(state => ({ mobileOpen: !state.mobileOpen }));
@@ -82,18 +89,40 @@ class App extends Component {
 
         // Clear sessionStorage
         sessionStorage.clear();
-        // Store all content into sessionStorage
-        sessionStorage.setItem("email", email);
 
         // if (email && password) {
         auth.doSignInWithEmailAndPassword(email, password)
-            .then(res => console.log("It works"))
+            .then(res => {
+                API.getUserByEmail(email).then(res => {
+                    const userData = res.data[0]
+                    // Store all content into sessionStorage
+                    sessionStorage.setItem("id", userData._id);
+                    return this.setState({ user: userData, modal: false })
+                }).catch(err => console.log(err));
+
+            })
             .catch(err => alert(err))
+
+    };
+
+    handleLogOut = (e) => {
+        e.preventDefault();
+        sessionStorage.clear();
+        auth.doSignOut();
+        this.setState({user: ""})
+    }
+
+    handleMenu = event => {
+        this.setState({ anchorEl: event.currentTarget });
+    };
+
+    handleMenuClose = () => {
+        this.setState({ anchorEl: null });
     };
 
     render() {
-        const { classes, theme } = this.props;
-
+        const { classes, theme, ...rest } = this.props;
+        const { user } = this.state;
         return (
             // <Provider store={store}>
             <Router>
@@ -110,31 +139,33 @@ class App extends Component {
                         password={this.state.password}
                         onInputChange={this.handleInputChange}
                         onLoginSubmit={this.handleLoginSubmit}
-                        userLogin={this.state.userLogin}
+                        user={user}
+                        handleMenu={this.handleMenu}
+                        open={Boolean(this.state.anchorEl)}
+                        anchorEl={this.state.anchorEl}
+                        handleMenuClose={this.handleMenuClose}
+                        handleLogOut = {this.handleLogOut}
                     />
 
                     <SideNavBar
                         onDrawerToggle={this.handleDrawerToggle}
                         mobileOpen={this.state.mobileOpen}
-                        userLogin={this.state.userLogin}
+                        user={user}
                     />
 
-                    {/* <main className={classes.content}>
-                        <div className={classes.toolbar} /> */}
                     <Switch>
-                        <Route exact path="/" component={Home} />
-                        <Route exact path="/dashboard" component={Dashboard} />
-                        <Route exact path="/map" component={Map} />
-                        <Route exact path="/evacuationlists" component={Evacuationlists} />
-                        <Route exact path="/homelists" component={Homelists} />
-                        <Route exact path="/shelters" component={Shelters} />
-                        <Route exact path="/resources" component={Resources} />
-                        <Route exact path="/announcement" component={Announcement} />
-                        <Route exact path="/household" component={Household} />
-                        <Route exact path="/signup" component={SignUp} />
-                        <Route component={NoMatch} />
+                        <Route exact path="/" render={props => <Home {...props} user={user} />} />
+                        <Route exact path="/dashboard" render={props => <Dashboard {...props} user={user} />} />
+                        <Route exact path="/map" render={props => <Map {...props} user={user} />} />
+                        <Route exact path="/evacuationlists" render={props => <Evacuationlists {...props} user={user} />} />
+                        <Route exact path="/homelists" render={props => <Homelists {...props} user={user} />} />
+                        <Route exact path="/shelters" render={props => <Shelters {...props} user={user} />} />
+                        <Route exact path="/resources" render={props => <Resources {...props} user={user} />} />
+                        <Route exact path="/announcement" render={props => <Announcement {...props} user={user} />} />
+                        <Route exact path="/household" render={props => <Household {...props} user={user} />} />
+                        <Route exact path="/signup" render={props => <SignUp {...props} user={user} />} />
+                        <Route render={props => <NoMatch {...props} user />} />
                     </Switch>
-                    {/* </main> */}
                 </div>
             </Router>
             // </Provider>

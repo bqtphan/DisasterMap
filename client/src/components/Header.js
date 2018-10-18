@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { AppBar, Toolbar, Typography, IconButton, Button, TextField, InputAdornment, FormControlLabel, Checkbox, Avatar } from '@material-ui/core';
-import { Menu, PermIdentity, Lock, AccountCircle } from '@material-ui/icons';
+import { Menu, MenuItem, AppBar, Toolbar, Typography, IconButton, Button, TextField, InputAdornment, FormControlLabel, Checkbox, Avatar } from '@material-ui/core';
+import { PermIdentity, Lock, AccountCircle } from '@material-ui/icons';
+import { Menu as MenuIcon} from '@material-ui/icons';
 import LoginModal from './SimpleModal';
 import { Redirect } from 'react-router-dom';
 import { auth } from '../components/firebase';
-
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -42,7 +43,7 @@ const styles = theme => ({
     },
 });
 
-const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, modal, email, password, onInputChange, onLoginSubmit, userLogin }) => {
+const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, modal, email, password, onInputChange, onLoginSubmit, user, handleMenu, anchorEl, handleMenuClose, open, handleLogOut }) => {
 
     return (
         <Fragment>
@@ -54,28 +55,47 @@ const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, mod
                         onClick={onDrawerToggle}
                         className={classes.navIconHide}
                     >
-                        <Menu />
+                        <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" color="inherit" noWrap className={classes.grow} >
                         Disaster Map
                     </Typography>
 
-                    {userLogin ? (
-                                    
-                                        <div>
-                                          <IconButton
-                                            color="inherit"
-                                          >
-                                            <AccountCircle />
-                                          </IconButton>
-                                          </div>
+                    {user ? (
+                            <div>
+                                <IconButton
+                                    aria-owns={open ? "menu-appbar" : null}
+                                    aria-haspopup="true"
+                                    onClick={handleMenu}
+                                    color="inherit"
+                                >
+                                    <AccountCircle />
+                                </IconButton>
+                                <Menu
+                                    id="menu-appbar"
+                                    anchorEl={anchorEl}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={open}
+                                    onClose={handleMenuClose}
+                                >
+                                    <MenuItem component={Link} to="/household" onClick={handleMenuClose}>Profile</MenuItem>
+                                    <MenuItem onClick={handleLogOut}>Log out</MenuItem>
+                                </Menu>
+                            </div>
                     ) : (
-                        <Fragment>
-                        <Button href="/signup" color="inherit">Sign Up</Button>
-                        <Button onClick={onOpenModal} color="inherit">Login</Button>
-                        </Fragment>
-                    )}
-                    
+                            <Fragment>
+                                <Button component={Link} to="/signup" color="inherit">Sign Up</Button>
+                                <Button onClick={onOpenModal} color="inherit">Login</Button>
+                            </Fragment>
+                        )}
+
 
                     <LoginModal
                         ariaLabel="Login"
@@ -84,7 +104,7 @@ const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, mod
                         onClose={onCloseModal}
                     >
                         <Typography component="h1" variant="h6" align="center">
-            Log in
+                            Log in
           </Typography>
                         <form className={classes.container} onSubmit={onLoginSubmit}>
 
@@ -127,7 +147,7 @@ const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, mod
                                 label="Remember me"
                             />
 
-                            <Button type="submit" variant="contained" color="primary" className={classes.button} fullWidth onClick={ onCloseModal }>
+                            <Button type="submit" variant="contained" color="primary" className={classes.button} fullWidth>
                                 Log in
                             </Button>
                         </form>

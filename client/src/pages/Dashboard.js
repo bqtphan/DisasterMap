@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid, Typography } from '@material-ui/core';
+import {green, amber} from '@material-ui/core/colors';
+import Footer from '../components/Footer';
 
 const styles = theme => ({
   paper: {
@@ -13,8 +15,25 @@ const styles = theme => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3,
+    maxHeight: '100%',
+    overflow: 'auto',
   },
   toolbar: theme.mixins.toolbar,
+  success: {
+    backgroundColor: green[600],
+  },
+  error: {
+    backgroundColor: theme.palette.error.dark,
+  },
+  info: {
+    backgroundColor: theme.palette.primary.dark,
+  },
+  warning: {
+    backgroundColor: amber[700],
+  },
+  mainContainer: {
+    minHeight: 'calc(100% - 123px)'
+},
 });
 
 class Dashboard extends Component {
@@ -24,6 +43,7 @@ class Dashboard extends Component {
     return (
       <main className={classes.content}>
         <div className={classes.toolbar} />
+        <div className={classes.mainContainer}>
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <Paper className={classes.paper}>
@@ -34,6 +54,8 @@ class Dashboard extends Component {
               </Paper>
           </Grid>
         </Grid>
+        </div>
+                <Footer/>
       </main>
     );
   }

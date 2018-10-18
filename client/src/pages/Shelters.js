@@ -24,8 +24,19 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
+    maxHeight: '100%'
 },
 toolbar: theme.mixins.toolbar,
+mapArea: {
+  height: '100%',
+  paddingTop: '56px',
+  [theme.breakpoints.up('xs')]: {
+    paddingTop: '48px',
+  },
+  [theme.breakpoints.up('sm')]: {
+    paddingTop: '64px',
+  },
+},
 });
 
 let curLat = 0;
@@ -86,7 +97,7 @@ class Shelters extends Component {
 
     return (
       <main className={classes.content}>
-      <div className={classes.toolbar} />
+      {/* <div className={classes.mapArea}> */}
       <Grid container spacing={23.5}>
         <Grid item xs={12} md={8}>
           <Paper className={classes.paper}>
@@ -139,6 +150,7 @@ class Shelters extends Component {
           </Paper>
         </Grid>
       </Grid>
+      {/* </div> */}
       </main>
     );
   }

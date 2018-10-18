@@ -15,22 +15,23 @@ lastName: {
 },
 address: {
     type: String,
-    required: true
+    // required: true
 },
 phoneNumber: {
     type: String,
-    required: true
+    // required: true
 },
 email: {
     type: String,
     required: true
 },
-password: {
-    type: String,
-    required: true
-},
+// password: {
+//     type: String,
+//     required: true
+// },
 isAdmin: {
-    type: Boolean
+    type: Boolean,
+    default: false
 }
 });
 
