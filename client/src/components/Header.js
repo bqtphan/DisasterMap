@@ -60,7 +60,9 @@ const Header = ({ classes, theme, onDrawerToggle, onOpenModal, onCloseModal, mod
                     <Typography variant="h6" color="inherit" noWrap className={classes.grow} >
                         Disaster Map
                     </Typography>
-
+                    <Typography variant="h6" color="inherit" noWrap className={classes.grow}  >
+                    {sessionStorage.getItem("firstName") !="" && "Welcome " + sessionStorage.getItem("firstName") + " " + sessionStorage.getItem("lastName")}
+                    </Typography>
                     {user ? (
                             <div>
                                 <IconButton
