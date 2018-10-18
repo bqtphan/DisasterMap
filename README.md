@@ -1,8 +1,8 @@
 # Project-3
 
-* Project Manager: Brian Phan
-* Git Master: --
-* Deployed Project: 
+* Project Manager: David Tran
+* Git Master: Brian Phan
+* Deployed Project: https://natural-disaster.herokuapp.com/
 * GitHub repository: https://github.com/bqtphan/DisasterMap
 
 # PROJECT PROPOSAL : DisasterMap
@@ -11,7 +11,9 @@
 
 
 ### Goals/Objectives:
-* Z
+* Pre-disaster checklist
+* Google Maps API
+* User marker ability
 
   
 ### Requirements
@@ -34,7 +36,7 @@ Create a migration strategy | Share data across team members | Schema/seed.sql f
  
 ### Key Personnel
 
-Name | Role(s)
------|--------
-Andrew Duong | 
-David Tran | 
+Brian Phan
+Andrew Duong
+David Tran
+Melinh Mai
