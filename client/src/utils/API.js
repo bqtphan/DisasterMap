@@ -57,6 +57,9 @@ export default {
   getUsers: () => {
     return axios.get("/api/users");
   },
+  getUserByEmail: (email) => {
+    return axios.get("/api/users?email=" + email);
+  },
   getUser: (id) => {
     return axios.get("/api/users/" + id);
   },
@@ -65,6 +68,15 @@ export default {
   },
   deleteUser: (id) => {
     return axios.delete("/api/users/" + id);
+  },
+  getHouseholdByOwner: (owner) => {
+    return axios.get("/api/households?createdBy=" + '5bc7a2198f2a825480781d0f');
+  },
+  saveHousehold: (householdData) => {
+    return axios.post("/api/households", householdData);
+  },
+  updateHousehold: (id, data) => {
+    return axios.put("/api/households/" + id, data);
   },
   getShelters: function(lat, lng, filter) {
     return axios.get("https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + lat + "," + lng + "&rankby=distance&type=" + filter + googleApiKey);

@@ -2,12 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid } from '@material-ui/core';
+import Footer from '../components/Footer';
 
 const styles = theme => ({
   paper: {
     padding: theme.spacing.unit * 2,
     textAlign: 'center',
     color: theme.palette.text.secondary,
+    maxHeight: '100%',
+    overflow: 'auto',
   },
   content: {
     flexGrow: 1,
@@ -15,6 +18,9 @@ const styles = theme => ({
     padding: theme.spacing.unit * 3,
   },
   toolbar: theme.mixins.toolbar,
+  mainContainer: {
+    minHeight: 'calc(100% - 123px)'
+},
 });
 
 function NoMatch(props) {
@@ -23,6 +29,7 @@ function NoMatch(props) {
   return (
     <main className={classes.content}>
       <div className={classes.toolbar} />
+      <div className={classes.mainContainer}>
       <Grid container spacing={24}>
         <Grid item xs={12}>
           <Paper className={classes.paper}>
@@ -35,6 +42,8 @@ function NoMatch(props) {
           </Paper>
         </Grid>
       </Grid>
+      </div>
+                <Footer/>
     </main>
   );
 }

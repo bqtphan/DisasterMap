@@ -19,7 +19,7 @@ const DisasterMap = compose(
     withGoogleMap
 )(props =>
     <GoogleMap
-        defaultZoom={5}
+        defaultZoom={8}
         defaultCenter = {{lat: 36, lng: -113}}
         center = {props.currentLoc}
     >

@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Paper, Grid, Typography, TextField, Button, Checkbox, List, ListItemText, ListItem, IconButton } from '@material-ui/core';
 import { Delete, Edit } from '@material-ui/icons';
 import SimpleModal from '../../components/SimpleModal';
+import Footer from '../../components/Footer';
 
 const styles = theme => ({
   paper: {
@@ -34,14 +35,6 @@ const styles = theme => ({
   slashedText: {
     textDecoration: "line-through"
   },
-  containerScroll: {
-    // overflow: 'auto',
-    // height: '100%',
-  },
-  icons: {
-    padding: '10px',
-    zIndex: '101'
-  },
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
@@ -50,6 +43,9 @@ const styles = theme => ({
     height: '100%',
   },
   toolbar: theme.mixins.toolbar,
+  mainContainer: {
+    minHeight: 'calc(100% - 123px)'
+},
 });
 
 
@@ -125,7 +121,8 @@ class Homelists extends Component {
     return (
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Grid container spacing={0} className={classes.containerScroll}>
+        <div className={classes.mainContainer} >
+        <Grid container spacing={0}>
           <Grid item xs={12} md={12}>
             <Grid
               container
@@ -151,7 +148,6 @@ class Homelists extends Component {
                           >
                             <Grid item xs={1} sm={1} md={1} style={{ maxWidth: 'none' }}>
                               <Checkbox
-                                // className={classes.icons}
                                 checked={item.checked}
                                 tabIndex={-1}
                                 // disabled={item.checked}
@@ -229,6 +225,8 @@ class Homelists extends Component {
             </Grid>
           </Grid>
         </Grid>
+        </div>
+        <Footer />
       </main>
     );
   }

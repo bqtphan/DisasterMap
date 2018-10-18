@@ -28,28 +28,28 @@ const styles = theme => ({
     }
 });
 
-const SideNavBar = ({ classes, theme, onDrawerToggle, mobileOpen, userLogin }) => {
+const SideNavBar = ({ classes, theme, onDrawerToggle, mobileOpen, user, ...rest}) => {
 
     const drawer = (
         <Fragment>
             <div className={classes.toolbar} />
             <Divider />
             <List>
-                <ListItem button component={Link} to="/">
+                <ListItem button component={Link} to="/" onClick={onDrawerToggle}>
                     <ListItemIcon>
                         <Home />
                     </ListItemIcon>
                     <ListItemText primary="Home" />
                 </ListItem>
 
-                {userLogin ? <ListItem button component={Link} to="/dashboard">
+                {user ? <ListItem button component={Link} to="/dashboard" onClick={onDrawerToggle}>
                     <ListItemIcon>
                         <Dashboard />
                     </ListItemIcon>
                     <ListItemText primary="Dashboard" />
                 </ListItem> : null}
 
-                <ListItem button component={Link} to="/announcement">
+                <ListItem button component={Link} to="/announcement" onClick={onDrawerToggle}>
                     <ListItemIcon>
                         <Announcement />
                     </ListItemIcon>
@@ -58,32 +58,32 @@ const SideNavBar = ({ classes, theme, onDrawerToggle, mobileOpen, userLogin }) =
 
                 <Divider />
 
-                <ListItem button component={Link} to="/evacuationlists">
+                <ListItem button component={Link} to="/evacuationlists" onClick={onDrawerToggle}>
                     <ListItemIcon>
                         <Work />
                     </ListItemIcon>
                     <ListItemText primary="Evacuation Kit" />
                 </ListItem>
-                <ListItem button component={Link} to="/homelists">
+                <ListItem button component={Link} to="/homelists" onClick={onDrawerToggle}>
                     <ListItemIcon>
                         <BusinessCenter />
                     </ListItemIcon>
                     <ListItemText primary="Home Kit" />
                 </ListItem>
 
-                <ListItem button component={Link} to="/shelters">
+                <ListItem button component={Link} to="/shelters" onClick={onDrawerToggle}>
                     <ListItemIcon>
                         <LocationCity />
                     </ListItemIcon>
                     <ListItemText primary="Shelters" />
                 </ListItem>
-                <ListItem button component={Link} to="/map">
+                <ListItem button component={Link} to="/map" onClick={onDrawerToggle}>
                     <ListItemIcon>
                         <Map />
                     </ListItemIcon>
                     <ListItemText primary="Map" />
                 </ListItem>
-                <ListItem button component={Link} to="/household">
+                <ListItem button component={Link} to="/household" onClick={onDrawerToggle}>
                     <ListItemIcon>
                         <Map />
                     </ListItemIcon>
@@ -92,7 +92,7 @@ const SideNavBar = ({ classes, theme, onDrawerToggle, mobileOpen, userLogin }) =
             </List>
             <Divider />
             <List>
-                <ListItem button component={Link} to="/resources">
+                <ListItem button component={Link} to="/resources" onClick={onDrawerToggle}>
                     <ListItemIcon>
                         <Help />
                     </ListItemIcon>

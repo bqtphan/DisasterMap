@@ -7,6 +7,7 @@ import API from '../utils/API';
 import { auth } from '../components/firebase';
 // import { withRouter } from "react-router";
 import { withRouter } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 const styles = theme => ({
     paper: {
@@ -29,15 +30,20 @@ const styles = theme => ({
         flexGrow: 1,
         backgroundColor: theme.palette.background.default,
         padding: theme.spacing.unit * 3,
+        maxHeight: '100%',
+        overflow: 'auto',
     },
     toolbar: theme.mixins.toolbar,
+    mainContainer: {
+        minHeight: 'calc(100% - 123px)'
+    },
 });
 
 class SignUp extends Component {
     state = {
-        name: "",
+        firstName: "",
         // middleName: "",
-        // lastName: "",
+        lastName: "",
         // address: "",
         // phoneNumber: "",
         email: "",
@@ -59,7 +65,7 @@ class SignUp extends Component {
 
     handleRegisterSubmit = async event => {
         event.preventDefault();
-        const { name, email, password, password2 } = this.state
+        const { firstName, lastName, email, password, password2 } = this.state
 
         const {
             history,
@@ -67,19 +73,26 @@ class SignUp extends Component {
 
         sessionStorage.clear();
         // Store all content into sessionStorage
-        sessionStorage.setItem("name", name);
+        sessionStorage.setItem("firstName", firstName);
+        sessionStorage.setItem("lastName", lastName);
         sessionStorage.setItem("email", email);
 
-        console.log(name, email, password, password2)
-        auth.doCreateUserWithEmailAndPassword(email, password)
+        console.log(firstName, lastName, email, password, password2)
+        if(password === password2) {
+            auth.doCreateUserWithEmailAndPassword(email, password)
             .then(function (user) {
-                API.saveUser({ name, email })
-                    .then(result => console.log(user))
+                API.saveUser({ firstName, lastName, email })
+                    .then(result => console.log(result))
                     .catch(err => console.log(err))
                 history.push("/");
             }).catch(function (error) {
                 console.log(error.message);
             });
+        } else {
+
+        }
+        
+        
     }
 
     render() {
@@ -88,6 +101,7 @@ class SignUp extends Component {
         return (
             <main className={classes.content}>
                 <div className={classes.toolbar} />
+                <div className={classes.mainContainer}>
                 <Grid container spacing={24}>
                     <Grid item xs={12} md={8}>
                         <Paper className={classes.paper}>
@@ -97,9 +111,9 @@ class SignUp extends Component {
                             <form className={classes.formContainer} onSubmit={this.handleRegisterSubmit}>
 
                                 <TextField
-                                    id="name"
+                                    id="firstName"
                                     label="Full Name"
-                                    name="name"
+                                    name="firstName"
                                     type="text"
                                     className={classes.textField}
                                     value={this.state.firstName}
@@ -112,7 +126,7 @@ class SignUp extends Component {
                                     autoFocus
                                     fullWidth
                                 />
-                                {/* <TextField
+                                <TextField
                                 id="lastName"
                                 label="Last Name"
                                 name="lastName"
@@ -126,7 +140,7 @@ class SignUp extends Component {
                                 }}
                                 required
                                 fullWidth
-                            /> */}
+                            />
                                 <TextField
                                     id="email"
                                     label="Email"
@@ -185,6 +199,8 @@ class SignUp extends Component {
                         </Paper>
                     </Grid>
                 </Grid>
+                </div>
+                <Footer/>
             </main>
         );
     }

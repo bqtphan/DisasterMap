@@ -6,6 +6,7 @@ import { Paper, Grid, Typography, TextField, Button, List, ListItem, ListItemTex
 import { Delete, Edit } from '@material-ui/icons';
 import SimpleModal from '../../components/SimpleModal';
 // import { connect } from 'react-redux';
+import Footer from '../../components/Footer';
 
 const styles = theme => ({
   paper: {
@@ -35,14 +36,6 @@ const styles = theme => ({
   slashedText: {
     textDecoration: "line-through"
   },
-  containerScroll: {
-    // overflow: 'auto',
-    // maxHeight: '100vh',
-  },
-  icons: {
-    padding: '10px',
-    zIndex: '101'
-  },
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
@@ -51,6 +44,9 @@ const styles = theme => ({
     overflow: 'auto',
   },
   toolbar: theme.mixins.toolbar,
+  mainContainer: {
+    minHeight: 'calc(100% - 123px)'
+},
 });
 
 class Evacuationlists extends Component {
@@ -125,7 +121,8 @@ class Evacuationlists extends Component {
     return (
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Grid container spacing={0} className={classes.containerScroll}>
+        <div className={classes.mainContainer}>
+        <Grid container spacing={0}>
           <Grid item xs={12} md={12}>
             <Grid
               container
@@ -154,7 +151,6 @@ class Evacuationlists extends Component {
                           >
                             <Grid item xs={1} sm={1} md={1} style={{ maxWidth: 'none' }}>
                               <Checkbox
-                                // className={classes.icons}
                                 checked={item.checked}
                                 tabIndex={-1}
                                 disableRipple
@@ -231,6 +227,8 @@ class Evacuationlists extends Component {
             </Grid>
           </Grid>
         </Grid>
+        </div>
+        <Footer />
       </main>
     );
   }
